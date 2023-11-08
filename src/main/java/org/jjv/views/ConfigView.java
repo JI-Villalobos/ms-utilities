@@ -1,7 +1,15 @@
 package org.jjv.views;
 
+import org.jjv.instances.ConfigInstance;
+import org.jjv.persistence.DDBBVerifier;
+import org.jjv.utils.Config;
+import org.jjv.utils.ConfigModel;
+
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Arrays;
 
 public class ConfigView extends JFrame {
     private JLabel configText;
@@ -15,10 +23,18 @@ public class ConfigView extends JFrame {
     private JLabel userLabel;
     private JButton verifyButton;
 
-    public ConfigView(){
+    public ConfigView() {
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Requermientos");
         initComponents();
+        verifyButton.addActionListener(e -> {
+            prepareConfigFile(urlField.getText(), userField.getText(), Arrays.toString(passField.getPassword()));
+            checkConnection();
+        });
     }
-    private void initComponents(){
+
+    private void initComponents() {
         jPanel1 = new javax.swing.JPanel();
         configText = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
@@ -30,8 +46,6 @@ public class ConfigView extends JFrame {
         passField = new javax.swing.JPasswordField();
         verifyButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Requermientos");
         configText.setText("Ingresa las credenciales para acceder al aplicativo");
 
         /*TOP Panel*/
@@ -40,7 +54,7 @@ public class ConfigView extends JFrame {
         topLayout.setHorizontalGroup(
                 topLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(topLayout.createSequentialGroup()
-                                .addGap(77,77,77)
+                                .addGap(77, 77, 77)
                                 .addComponent(configText)
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         )
@@ -65,7 +79,7 @@ public class ConfigView extends JFrame {
         GroupLayout centerPanel = new GroupLayout(jPanel2);
         jPanel2.setLayout(centerPanel);
         centerPanel.setHorizontalGroup(
-                centerPanel.createParallelGroup(GroupLayout.Alignment.LEADING)
+                   centerPanel.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(centerPanel.createSequentialGroup()
                                 .addContainerGap(26, Short.MAX_VALUE)
                                 .addGroup(centerPanel.createParallelGroup(GroupLayout.Alignment.LEADING)
@@ -122,4 +136,24 @@ public class ConfigView extends JFrame {
 
         pack();
     }
+
+    private void prepareConfigFile(String url, String user, String pass){
+        ConfigModel config = new ConfigModel(url, user, pass);
+        try {
+            Config.generateConfigFile(config);
+        } catch (IOException e) {
+            System.out.println("Config creation error");
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void checkConnection(){
+        try {
+            DDBBVerifier.checkConnection();
+        } catch (Exception e) {
+            System.out.println("Database verification error");
+            System.out.println(e.getMessage());
+        }
+    }
+
 }
