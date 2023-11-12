@@ -12,13 +12,15 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 public class ConfigView extends JFrame {
+    private JPanel centerPanel;
     private JLabel configText;
-    private JPanel jPanel1;
-    private JPanel jPanel2;
+    private JTextField dbField;
+    private JLabel dbLabel;
+    private JTextField domainField;
+    private JLabel domainLabel;
     private JPasswordField passField;
     private JLabel passLabel;
-    private JTextField urlField;
-    private JLabel urlLabel;
+    private JPanel topPanel;
     private JTextField userField;
     private JLabel userLabel;
     private JButton verifyButton;
@@ -26,118 +28,134 @@ public class ConfigView extends JFrame {
     public ConfigView() {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setTitle("Requermientos");
+        setTitle("Requerimientos");
+        setResizable(false);
         initComponents();
         verifyButton.addActionListener(e -> {
-            prepareConfigFile(urlField.getText(), userField.getText(), Arrays.toString(passField.getPassword()));
+            prepareConfigFile(domainField.getText(), dbField.getText(), userField.getText(), buildPass(passField.getPassword()));
             checkConnection();
         });
     }
 
     private void initComponents() {
-        jPanel1 = new javax.swing.JPanel();
-        configText = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        urlLabel = new javax.swing.JLabel();
-        urlField = new javax.swing.JTextField();
-        userLabel = new javax.swing.JLabel();
-        userField = new javax.swing.JTextField();
-        passLabel = new javax.swing.JLabel();
-        passField = new javax.swing.JPasswordField();
-        verifyButton = new javax.swing.JButton();
+        topPanel = new JPanel();
+        configText = new JLabel();
+        centerPanel = new JPanel();
+        domainLabel = new JLabel();
+        domainField = new JTextField();
+        userLabel = new JLabel();
+        userField = new JTextField();
+        passLabel = new JLabel();
+        passField = new JPasswordField();
+        verifyButton = new JButton();
+        dbLabel = new JLabel();
+        dbField = new JTextField();
+
+        setPreferredSize(new Dimension(400, 300));
 
         configText.setText("Ingresa las credenciales para acceder al aplicativo");
 
-        /*TOP Panel*/
-        GroupLayout topLayout = new GroupLayout(jPanel1);
-        jPanel1.setLayout(topLayout);
-        topLayout.setHorizontalGroup(
-                topLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(topLayout.createSequentialGroup()
+        GroupLayout topPanelLayout = new GroupLayout(topPanel);
+        topPanel.setLayout(topPanelLayout);
+        topPanelLayout.setHorizontalGroup(
+                topPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(topPanelLayout.createSequentialGroup()
                                 .addGap(77, 77, 77)
                                 .addComponent(configText)
-                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        )
+                                .addContainerGap(87, Short.MAX_VALUE))
         );
-        topLayout.setVerticalGroup(
-                topLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(GroupLayout.Alignment.TRAILING, topLayout.createSequentialGroup()
+        topPanelLayout.setVerticalGroup(
+                topPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(GroupLayout.Alignment.TRAILING, topPanelLayout.createSequentialGroup()
                                 .addContainerGap(15, Short.MAX_VALUE)
                                 .addComponent(configText)
                                 .addContainerGap())
         );
 
-        /*CENTER Panel*/
-        urlLabel.setText("DDBB URL: ");
+        domainLabel.setText("DOMAIN: ");
+        
         userLabel.setText("USERNAME:");
+
         passLabel.setText("PASSWORD:");
 
-        verifyButton.setBackground(new Color(153, 0, 153));
-        verifyButton.setForeground(new Color(255, 255, 255));
+        verifyButton.setBackground(new java.awt.Color(153, 0, 153));
+        verifyButton.setForeground(new java.awt.Color(255, 255, 255));
         verifyButton.setText("Verificar");
 
-        GroupLayout centerPanel = new GroupLayout(jPanel2);
-        jPanel2.setLayout(centerPanel);
-        centerPanel.setHorizontalGroup(
-                   centerPanel.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(centerPanel.createSequentialGroup()
-                                .addContainerGap(26, Short.MAX_VALUE)
-                                .addGroup(centerPanel.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                        .addGroup(GroupLayout.Alignment.TRAILING, centerPanel.createSequentialGroup()
-                                                .addGroup(centerPanel.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                                        .addComponent(urlLabel)
+        dbLabel.setText("DB NAME: ");
+
+        GroupLayout centerPanelLayout = new GroupLayout(centerPanel);
+        centerPanel.setLayout(centerPanelLayout);
+        centerPanelLayout.setHorizontalGroup(
+                centerPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(centerPanelLayout.createSequentialGroup()
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(verifyButton, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)
+                                .addGap(143, 143, 143))
+                        .addGroup(centerPanelLayout.createSequentialGroup()
+                                .addGap(76, 76, 76)
+                                .addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addGroup(centerPanelLayout.createSequentialGroup()
+                                                .addComponent(domainLabel, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(domainField, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(centerPanelLayout.createSequentialGroup()
+                                                .addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addComponent(userLabel)
                                                         .addComponent(passLabel))
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addGroup(centerPanel.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                                        .addComponent(urlField, GroupLayout.PREFERRED_SIZE, 299, GroupLayout.PREFERRED_SIZE)
-                                                        .addGroup(centerPanel.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                                                .addComponent(passField, GroupLayout.Alignment.LEADING)
-                                                                .addComponent(userField, GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                                .addContainerGap())
-                                        .addGroup(GroupLayout.Alignment.TRAILING, centerPanel.createSequentialGroup()
-                                                .addComponent(verifyButton, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)
-                                                .addGap(139, 139, 139))))
+                                                .addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
+                                                        .addComponent(passField, GroupLayout.Alignment.LEADING)
+                                                        .addComponent(userField, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(centerPanelLayout.createSequentialGroup()
+                                                .addComponent(dbLabel, GroupLayout.PREFERRED_SIZE, 65, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(dbField, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)))
+                                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        centerPanel.setVerticalGroup(
-                centerPanel.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(centerPanel.createSequentialGroup()
+        centerPanelLayout.setVerticalGroup(
+                centerPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(centerPanelLayout.createSequentialGroup()
                                 .addContainerGap()
-                                .addGroup(centerPanel.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(urlLabel)
-                                        .addComponent(urlField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(centerPanel.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(domainLabel)
+                                        .addComponent(domainField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                                .addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                        .addComponent(dbLabel)
+                                        .addComponent(dbField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(userLabel)
                                         .addComponent(userField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                                 .addGap(23, 23, 23)
-                                .addGroup(centerPanel.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                .addGroup(centerPanelLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(passLabel)
                                         .addComponent(passField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(verifyButton, GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(verifyButton, GroupLayout.PREFERRED_SIZE, 39, GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())
         );
 
-        GroupLayout centerLayout = new GroupLayout(getContentPane());
-        getContentPane().setLayout(centerLayout);
-        centerLayout.setHorizontalGroup(
-                centerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        GroupLayout layout = new GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(topPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(centerPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        centerLayout.setVerticalGroup(
-                centerLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                        .addGroup(centerLayout.createSequentialGroup()
-                                .addComponent(jPanel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+        layout.setVerticalGroup(
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addComponent(topPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(centerPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
         pack();
     }
 
-    private void prepareConfigFile(String url, String user, String pass){
+    private void prepareConfigFile(String domain, String dbName, String user, String pass){
+        String url = ConfigModel.assembleUrl(domain, dbName);
         ConfigModel config = new ConfigModel(url, user, pass);
         try {
             Config.generateConfigFile(config);
@@ -149,6 +167,7 @@ public class ConfigView extends JFrame {
 
     private void checkConnection(){
         try {
+            Config.getConfigFile();
             DDBBVerifier.checkConnection();
         } catch (Exception e) {
             System.out.println("Database verification error");
@@ -156,4 +175,7 @@ public class ConfigView extends JFrame {
         }
     }
 
+    private String buildPass(char[] pass){
+        return String.valueOf(pass);
+    }
 }

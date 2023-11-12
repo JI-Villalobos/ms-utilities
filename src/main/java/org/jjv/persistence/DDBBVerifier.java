@@ -11,9 +11,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DDBBVerifier {
-    public static void checkConnection() throws Exception {
-        ConfigModel config = Config.getConfigFile();
-        System.out.println(config.getUrl());
+    public static void checkConnection() throws SQLException {
+        ConfigModel config = ConfigInstance.getSingle();
         Connection connection = null;
         connection = DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword());
         connection.close();

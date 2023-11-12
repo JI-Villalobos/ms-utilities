@@ -3,9 +3,7 @@ package org.jjv.utils;
 import java.io.Serial;
 import java.io.Serializable;
 
-public class ConfigModel implements Serializable {
-    @Serial
-    private static final long serialVersionUID = 1L;
+public class ConfigModel {
     private String url;
     private String username;
     private String password;
@@ -14,6 +12,13 @@ public class ConfigModel implements Serializable {
         this.url = url;
         this.username = username;
         this.password = password;
+    }
+
+    public ConfigModel() {
+    }
+
+    public static String assembleUrl(String domain, String dbName){
+        return "jdbc:mysql://" + domain + "/" + dbName + "?noAccessToProcedureBodies=true&useSSL=false";
     }
     public String getUrl() {
         return url;
