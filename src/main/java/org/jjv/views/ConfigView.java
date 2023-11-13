@@ -1,6 +1,5 @@
 package org.jjv.views;
 
-import org.jjv.instances.ConfigInstance;
 import org.jjv.persistence.DDBBVerifier;
 import org.jjv.utils.Config;
 import org.jjv.utils.ConfigModel;
@@ -8,8 +7,6 @@ import org.jjv.utils.ConfigModel;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.Arrays;
 
 public class ConfigView extends JFrame {
     private JPanel centerPanel;

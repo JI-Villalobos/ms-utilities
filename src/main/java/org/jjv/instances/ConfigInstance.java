@@ -1,6 +1,5 @@
 package org.jjv.instances;
 
-import org.jjv.utils.Config;
 import org.jjv.utils.ConfigModel;
 
 import java.util.List;
