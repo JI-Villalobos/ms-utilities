@@ -12,14 +12,17 @@ public class InitialView extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         initComponents();
+
+        clientButton.addActionListener(e -> {
+            ClientsView clientsView = new ClientsView();
+            clientsView.setVisible(true);
+        });
     }
     
     private void initComponents(){
         buttonPanel = new JPanel();
         clientButton = new JButton();
         opButton = new JButton();
-
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         clientButton.setBackground(new java.awt.Color(153, 0, 153));
         clientButton.setForeground(new java.awt.Color(255, 255, 255));
