@@ -1,9 +1,15 @@
 package org.jjv.views;
 
+import org.jjv.models.Client;
+import org.jjv.persistence.ClientRepository;
+import org.jjv.persistence.Repository;
+
 import javax.swing.*;
-import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
+import java.sql.SQLException;
+import java.util.List;
 
 import static java.lang.Short.*;
 import static javax.swing.GroupLayout.*;
@@ -11,6 +17,7 @@ import static javax.swing.GroupLayout.Alignment.*;
 import static javax.swing.LayoutStyle.ComponentPlacement.*;
 
 public class ClientsView extends JFrame {
+    private Repository<Client>clientRepository;
     private JButton batchLoadButton;
     private JTextField clientSelectedField;
     private JPanel clientsPanel;
@@ -18,13 +25,16 @@ public class ClientsView extends JFrame {
     private JButton newClientButton;
     private JPanel optionsPanel;
     private JPanel selectionPanel;
-
+    private JTable clientsTable;
     public ClientsView(){
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setTitle("Selecciona un cliente");
         setResizable(false);
+        setSize(470, 500);
+        clientRepository = new ClientRepository();
+        refreshClients();
     }
     private void initComponents(){
         selectionPanel = new JPanel();
@@ -34,8 +44,8 @@ public class ClientsView extends JFrame {
         batchLoadButton = new JButton();
         newClientButton = new JButton();
         clientsPanel = new JPanel();
-
-        clientSelectedField.setEditable(false);
+        clientsTable = new JTable();
+        JScrollPane scrollPane = new JScrollPane(clientsTable);
 
         confirmClientButton.setBackground(new Color(153, 0, 153));
         confirmClientButton.setForeground(new Color(255, 255, 255));
@@ -91,15 +101,21 @@ public class ClientsView extends JFrame {
                                 .addGap(21, 21, 21))
         );
 
+        scrollPane.setViewportView(clientsTable);
         GroupLayout clientsPanelLayout = new GroupLayout(clientsPanel);
         clientsPanel.setLayout(clientsPanelLayout);
         clientsPanelLayout.setHorizontalGroup(
                 clientsPanelLayout.createParallelGroup(LEADING)
-                        .addGap(0, 0, MAX_VALUE)
+                        .addGroup(TRAILING, clientsPanelLayout.createSequentialGroup()
+                                .addContainerGap(DEFAULT_SIZE, MAX_VALUE)
+                                .addComponent(scrollPane, PREFERRED_SIZE, 426, PREFERRED_SIZE)
+                                .addContainerGap())
         );
         clientsPanelLayout.setVerticalGroup(
                 clientsPanelLayout.createParallelGroup(LEADING)
-                        .addGap(0, 270, MAX_VALUE)
+                        .addGroup(clientsPanelLayout.createSequentialGroup()
+                                .addComponent(scrollPane, PREFERRED_SIZE, 226, PREFERRED_SIZE)
+                                .addGap(0, 270, MAX_VALUE))
         );
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -120,5 +136,30 @@ public class ClientsView extends JFrame {
                                 .addComponent(clientsPanel, DEFAULT_SIZE, DEFAULT_SIZE, MAX_VALUE))
         );
         pack();
+    }
+
+    private void refreshClients(){
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("ID");
+        model.addColumn("CLIENTE");
+
+        try {
+            List<Client> clients = clientRepository.findAll();
+            for (Client client : clients){
+                Object[] data = {
+                    client.id(),
+                    client.name()
+                };
+                model.addRow(data);
+            }
+            clientsTable.setModel(model);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Error al obtener los clientes del servicio remoto de datos",
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 }

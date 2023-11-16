@@ -14,8 +14,7 @@ public class InitialView extends JFrame {
         initComponents();
 
         clientButton.addActionListener(e -> {
-            ClientsView clientsView = new ClientsView();
-            clientsView.setVisible(true);
+            ControllerView.connectClientsView(this);
         });
     }
     

@@ -166,6 +166,9 @@ public class ConfigView extends JFrame {
         try {
             Config.getConfigFile();
             DDBBVerifier.checkConnection();
+            InitialView initialView = new InitialView();
+            initialView.setVisible(true);
+            this.dispose();
         } catch (Exception e) {
             System.out.println("Database verification error");
             System.out.println(e.getMessage());
