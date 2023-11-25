@@ -1,13 +1,22 @@
 package org.jjv.views;
 
+import org.apache.poi.ss.usermodel.Sheet;
+import org.jjv.instances.ClientInstance;
+import org.jjv.instances.WorkBookInstance;
 import org.jjv.models.Client;
 import org.jjv.persistence.ClientRepository;
 import org.jjv.persistence.Repository;
+import org.jjv.readers.ClientReader;
+import org.jjv.readers.Reader;
+import org.jjv.utils.DefaultValues;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -35,7 +44,24 @@ public class ClientsView extends JFrame {
         setSize(470, 500);
         clientRepository = new ClientRepository();
         refreshClients();
+
+        clientsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                String id = clientsTable.getValueAt(clientsTable.getSelectedRow(), 0).toString();
+                Client client = new Client(
+                        Integer.parseInt(id),
+                        clientsTable.getValueAt(clientsTable.getSelectedRow(), 1).toString(),
+                        DefaultValues.ORGANIZATION_NUMBER
+                );
+                ClientInstance.create(client);
+                clientSelectedField.setText(client.name());
+            }
+        });
+        newClientButton.addActionListener(e -> addClient());
+        batchLoadButton.addActionListener(e -> addClients());
     }
+
     private void initComponents(){
         selectionPanel = new JPanel();
         clientSelectedField = new JTextField();
@@ -46,6 +72,8 @@ public class ClientsView extends JFrame {
         clientsPanel = new JPanel();
         clientsTable = new JTable();
         JScrollPane scrollPane = new JScrollPane(clientsTable);
+
+        clientSelectedField.setEnabled(false);
 
         confirmClientButton.setBackground(new Color(153, 0, 153));
         confirmClientButton.setForeground(new Color(255, 255, 255));
@@ -160,6 +188,60 @@ public class ClientsView extends JFrame {
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE
             );
+        }
+    }
+
+    private void addClient(){
+        JTextField nameField = new JTextField();
+        Object[] fields = {
+                "Nombre", nameField
+        };
+
+        int res = JOptionPane.showConfirmDialog(
+                this,
+                fields,
+                "Agregar Cliente",
+                JOptionPane.OK_CANCEL_OPTION
+        );
+
+        if (res == JOptionPane.OK_OPTION){
+            Client client = new Client(
+                    nameField.getText(),
+                    DefaultValues.ORGANIZATION_NUMBER
+            );
+            try {
+                clientRepository.save(client);
+                refreshClients();
+                JOptionPane.showMessageDialog(this,
+                        "Cliente agregado correctamente",
+                        "Éxito",
+                        JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Un Error inesperado causo la interrupción del registro del cliente",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    private void addClients(){
+        FileDialog.showFileDialog(this, "Carga masiva de clientes");
+        try {
+            Sheet sheet = WorkBookInstance.getSheet();
+            Reader<Client> clientReader = new ClientReader();
+            List<Client> clients = clientReader.collectData(sheet);
+            clientRepository.saveAll(clients);
+            JOptionPane.showMessageDialog(this,
+                    clients.size() + " clientes se agregaron correctamente",
+                    "Carga exitosa",
+                    JOptionPane.INFORMATION_MESSAGE);
+            refreshClients();
+        } catch (IOException | SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ocurrio un error inesperado: " +  e.getMessage(),
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }
