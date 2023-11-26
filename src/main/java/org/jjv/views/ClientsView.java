@@ -4,6 +4,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.jjv.instances.ClientInstance;
 import org.jjv.instances.WorkBookInstance;
 import org.jjv.models.Client;
+import org.jjv.operations.ExtractOperation;
 import org.jjv.persistence.ClientRepository;
 import org.jjv.persistence.Repository;
 import org.jjv.readers.ClientReader;
@@ -26,7 +27,7 @@ import static javax.swing.GroupLayout.Alignment.*;
 import static javax.swing.LayoutStyle.ComponentPlacement.*;
 
 public class ClientsView extends JFrame {
-    private Repository<Client>clientRepository;
+    private Repository<Client> clientRepository;
     private JButton batchLoadButton;
     private JTextField clientSelectedField;
     private JPanel clientsPanel;
@@ -234,9 +235,7 @@ public class ClientsView extends JFrame {
     private void addClients(){
         FileDialog.showFileDialog(this, "Carga masiva de clientes");
         try {
-            Sheet sheet = WorkBookInstance.getSheet();
-            Reader<Client> clientReader = new ClientReader();
-            List<Client> clients = clientReader.collectData(sheet);
+            List<Client> clients = ExtractOperation.extractClients();
             clientRepository.saveAll(clients);
             JOptionPane.showMessageDialog(this,
                     clients.size() + " clientes se agregaron correctamente",

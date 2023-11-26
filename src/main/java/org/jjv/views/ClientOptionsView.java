@@ -1,14 +1,23 @@
 package org.jjv.views;
 
 import org.jjv.instances.ClientInstance;
+import org.jjv.models.Operator;
+import org.jjv.operations.ExtractOperation;
+import org.jjv.persistence.OperatorRepository;
+import org.jjv.persistence.Repository;
 
 import javax.swing.*;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 import static javax.swing.GroupLayout.Alignment.*;
 import static javax.swing.GroupLayout.DEFAULT_SIZE;
 import static javax.swing.GroupLayout.PREFERRED_SIZE;
 
 public class ClientOptionsView extends JFrame {
+    private Repository<Operator> operatorRepository;
     private JButton addClientAccountsButton;
     private JButton batchOperatorsButton;
     private JLabel clienLabel;
@@ -22,7 +31,10 @@ public class ClientOptionsView extends JFrame {
         setLocationRelativeTo(null);
         setTitle("Operaciones con Clientes");
         setResizable(false);
+        operatorRepository = new OperatorRepository();
         clientField.setText(ClientInstance.getSingle().name());
+
+        batchOperatorsButton.addActionListener(e -> addOperators());
     }
 
     private void initComponents(){
@@ -98,4 +110,28 @@ public class ClientOptionsView extends JFrame {
         
         pack();
     }
+
+    private void addOperators(){
+        FileDialog.showFileDialog(this, "Selecciona archivo de terceros");
+        try {
+            List<Operator> operators = ExtractOperation.extractOperators();
+            int confirm = JOptionPane.showConfirmDialog(
+                    this,
+                    "Se detectaron " + operators.size() + " terceros ¿Desea registrarlos?",
+                    "Terceros", JOptionPane.OK_CANCEL_OPTION
+            );
+
+            if (confirm == JOptionPane.OK_OPTION){
+                operatorRepository.saveAll(operators);
+                JOptionPane.showMessageDialog(this,
+                        "Terceros registrados Exitosamente",
+                        "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (IOException | SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ocurrio un error al intentar el registro: " + e.getMessage(),
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }

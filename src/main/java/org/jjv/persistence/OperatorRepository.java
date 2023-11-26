@@ -31,8 +31,8 @@ public class OperatorRepository implements Repository<Operator> {
         Connection connection = getConnection();
         PreparedStatement ps = connection.prepareStatement(INSERT_ST);
         for (Operator operator : operators){
-            ps.setString(1, operator.rfc());
-            ps.setString(2, operator.name());
+            ps.setString(1, operator.name());
+            ps.setString(2, operator.rfc());
             ps.setInt(3, operator.client());
             ps.addBatch();
         }
