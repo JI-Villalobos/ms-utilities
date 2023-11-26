@@ -14,13 +14,13 @@ import java.util.List;
 
 public class OperatorRepository implements Repository<Operator> {
     ConfigModel configModel = ConfigInstance.getSingle();
-    private final String INSERT_ST = "INSERT INTO third_parties(rfc, name, client) VALUES (?, ?, ?)";
+    private final String INSERT_ST = "INSERT INTO operators(name, rfc, client) VALUES (?, ?, ?)";
     @Override
     public void save(Operator operator) throws SQLException {
         Connection connection = getConnection();
         PreparedStatement ps = connection.prepareStatement(INSERT_ST);
-        ps.setString(1, operator.rfc());
-        ps.setString(2, operator.name());
+        ps.setString(1, operator.name());
+        ps.setString(2, operator.rfc());
         ps.setInt(3, operator.client());
         ps.executeUpdate();
         connection.close();
