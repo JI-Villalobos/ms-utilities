@@ -60,6 +60,12 @@ public class ClientsView extends JFrame {
         });
         newClientButton.addActionListener(e -> addClient());
         batchLoadButton.addActionListener(e -> addClients());
+        confirmClientButton.addActionListener(e -> {
+            if (!clientSelectedField.getText().isEmpty()){
+                ControllerView.connectClientOptionsView();
+                dispose();
+            }
+        });
     }
 
     private void initComponents(){

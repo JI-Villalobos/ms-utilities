@@ -30,4 +30,9 @@ public class ControllerView {
             System.out.println("error: " + e.getMessage());
         }
     }
+
+    public static void connectClientOptionsView(){
+        ClientOptionsView clientOptionsView = new ClientOptionsView();
+        clientOptionsView.setVisible(true);
+    }
 }
