@@ -36,6 +36,7 @@ public class ClientRepository implements Repository<Client>{
         }
 
         ps.executeBatch();
+        connection.close();
     }
     @Override
     public List<Client> findAll() throws SQLException{
@@ -43,18 +44,21 @@ public class ClientRepository implements Repository<Client>{
         String sql = "SELECT * FROM clients";
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet resultSet = ps.executeQuery();
-       
+        connection.close();
+
         return createClientList(resultSet);
+
     }
 
     @Override
     public List<Client> findAllById(Integer id) throws SQLException {
         Connection connection = getConnection();
         String sql = "SELECT * FROM clients WHERE client = ?";
-        List<Client> clients = new ArrayList<>();
         PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, id);
         ResultSet resultSet = ps.executeQuery();
-        
+        connection.close();
+
         return createClientList(resultSet);
     }
 
