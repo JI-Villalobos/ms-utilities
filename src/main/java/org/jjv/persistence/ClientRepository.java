@@ -44,7 +44,6 @@ public class ClientRepository implements Repository<Client>{
         String sql = "SELECT * FROM clients";
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet resultSet = ps.executeQuery();
-        connection.close();
 
         return createClientList(resultSet);
 
@@ -57,7 +56,6 @@ public class ClientRepository implements Repository<Client>{
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, id);
         ResultSet resultSet = ps.executeQuery();
-        connection.close();
 
         return createClientList(resultSet);
     }

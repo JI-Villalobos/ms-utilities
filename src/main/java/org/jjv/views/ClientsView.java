@@ -191,10 +191,11 @@ public class ClientsView extends JFrame {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(
                     this,
-                    "Error al obtener los clientes del servicio remoto de datos",
+                    "Error al obtener los clientes del servicio remoto de datos: " + e.getMessage(),
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE
             );
+            this.dispose();
         }
     }
 

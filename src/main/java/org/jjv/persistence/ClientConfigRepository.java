@@ -58,7 +58,6 @@ public class ClientConfigRepository implements Repository<ClientConfig> {
         String sql = "SELECT * FROM clients_config";
         PreparedStatement ps = connection.prepareStatement(sql);
         ResultSet resultSet = ps.executeQuery();
-        connection.close();
 
         return createClientConfigList(resultSet);
     }
@@ -70,7 +69,6 @@ public class ClientConfigRepository implements Repository<ClientConfig> {
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, id);
         ResultSet resultSet = ps.executeQuery();
-        connection.close();
 
         return createClientConfigList(resultSet);
     }

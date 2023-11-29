@@ -1,16 +1,22 @@
 package org.jjv.views;
 
+import org.jjv.instances.ClientConfigInstance;
 import org.jjv.instances.ClientInstance;
+import org.jjv.instances.ConfigInstance;
+import org.jjv.models.ClientConfig;
 import org.jjv.models.Operator;
 import org.jjv.operations.ExtractOperation;
+import org.jjv.persistence.ClientConfigRepository;
 import org.jjv.persistence.OperatorRepository;
 import org.jjv.persistence.Repository;
+import org.jjv.utils.DefaultValues;
 
 import javax.swing.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import static javax.swing.GroupLayout.Alignment.*;
 import static javax.swing.GroupLayout.DEFAULT_SIZE;
@@ -18,6 +24,7 @@ import static javax.swing.GroupLayout.PREFERRED_SIZE;
 
 public class ClientOptionsView extends JFrame {
     private Repository<Operator> operatorRepository;
+    private Repository<ClientConfig> clientConfigRepository;
     private JButton addClientAccountsButton;
     private JButton batchOperatorsButton;
     private JLabel clienLabel;
@@ -32,9 +39,11 @@ public class ClientOptionsView extends JFrame {
         setTitle("Operaciones con Clientes");
         setResizable(false);
         operatorRepository = new OperatorRepository();
+        clientConfigRepository = new ClientConfigRepository();
         clientField.setText(ClientInstance.getSingle().name());
 
         batchOperatorsButton.addActionListener(e -> addOperators());
+        clientConfigurationButton.addActionListener(e -> setConfiguration());
     }
 
     private void initComponents(){
@@ -132,6 +141,82 @@ public class ClientOptionsView extends JFrame {
                     "Ocurrio un error al intentar el registro: " + e.getMessage(),
                     "ERROR", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void setConfiguration(){
+        Integer clientId = ClientInstance.getSingle().id();
+        Optional<ClientConfig> clientConfig = ClientConfigInstance.getSingle(clientId);
+        JTextField sellerMainAccountField = new JTextField();
+        JTextField sellerSATIdentifierField = new JTextField();
+        JTextField buyerMainAccountField = new JTextField();
+        JTextField buyerSATIdentifierField = new JTextField();
+        JTextField expenseMainAccountField = new JTextField();
+        JTextField minimumAmountField = new JTextField();
+
+        if (clientConfig.isPresent()){
+            ClientConfig config = clientConfig.get();
+            sellerMainAccountField.setText(config.sellerMainAccount());
+            sellerSATIdentifierField.setText(config.sellerSATIdentifier());
+            buyerMainAccountField.setText(config.buyerMainAccount());
+            buyerSATIdentifierField.setText(config.buyerSATIdentifier());
+            expenseMainAccountField.setText(config.expenseMainAccount());
+            minimumAmountField.setText(config.minimumAmountToApply().toString());
+        }
+
+        Object[] fields = {
+                "Cuenta padre Proveedor", sellerMainAccountField,
+                "Codigo SAT", sellerSATIdentifierField,
+                "Cuenta padre Cliente", buyerMainAccountField,
+                "Codigo SAT", buyerSATIdentifierField,
+                "Cuenta pricipal gastos", expenseMainAccountField,
+                "Aplicar gastos a monto mayor a:", minimumAmountField,
+        };
+
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                fields,
+                "Crear Configuracion",
+                JOptionPane.OK_CANCEL_OPTION
+        );
+
+        if (confirm == JOptionPane.OK_OPTION){
+            ClientConfig config = new ClientConfig(
+                    clientId,
+                    DefaultValues.ORGANIZATION_NUMBER,
+                    sellerMainAccountField.getText(),
+                    sellerSATIdentifierField.getText(),
+                    buyerMainAccountField.getText(),
+                    buyerSATIdentifierField.getText(),
+                    expenseMainAccountField.getText(),
+                    Double.parseDouble(minimumAmountField.getText())
+            );
+            try {
+                clientConfigRepository.save(config);
+                JOptionPane.showMessageDialog(this,
+                        "Configuracion registrada Exitosamente",
+                        "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
+                updateClientConfigInstance();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Ocurrio un error al intentar el registro: " + e.getMessage(),
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
+            }
+
+        }
+
+    }
+
+    private void updateClientConfigInstance(){
+        try {
+            List<ClientConfig> configList =
+                    clientConfigRepository.findAllById(DefaultValues.ORGANIZATION_NUMBER);
+            ClientConfigInstance.create(configList);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ocurrio un error al actualizar la lista general de configuraciones, reinicie el aplicativo: " + e.getMessage(),
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+
     }
 
 }
