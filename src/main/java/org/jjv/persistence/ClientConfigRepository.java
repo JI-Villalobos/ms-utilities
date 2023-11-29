@@ -14,11 +14,17 @@ import java.util.List;
 
 public class ClientConfigRepository implements Repository<ClientConfig> {
     ConfigModel configModel = ConfigInstance.getSingle();
-    private final String SQL = "INSERT INTO clients_config(client, organization, seller_main, seller_sat, buyer_main, buyer_sat, expense_main, minimum_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
     @Override
     public void save(ClientConfig clientConfig) throws SQLException {
+        String sql;
+        if (clientConfig.id() != null && clientConfig.id() > 0){
+            sql = "UPDATE clients_config SET client=?, organization=?, seller_main=?, seller_sat=?, buyer_main=?, buyer_sat=?, expense_main=?, minimum_amount=? WHERE id=?";
+        } else {
+            sql = "INSERT INTO clients_config(client, organization, seller_main, seller_sat, buyer_main, buyer_sat, expense_main, minimum_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        }
         Connection connection = getConnection();
-        PreparedStatement ps = connection.prepareStatement(SQL);
+        PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, clientConfig.clientId());
         ps.setInt(2, clientConfig.organization());
         ps.setString(3, clientConfig.sellerMainAccount());
@@ -27,6 +33,10 @@ public class ClientConfigRepository implements Repository<ClientConfig> {
         ps.setString(6, clientConfig.buyerSATIdentifier());
         ps.setString(7, clientConfig.expenseMainAccount());
         ps.setDouble(8, clientConfig.minimumAmountToApply());
+        if (clientConfig.id() != null && clientConfig.id() > 0){
+            ps.setInt(9, clientConfig.id());
+        }
+        ps.executeUpdate();
 
         connection.close();
     }
@@ -34,6 +44,7 @@ public class ClientConfigRepository implements Repository<ClientConfig> {
     @Override
     public void saveAll(List<ClientConfig> configList) throws SQLException {
         Connection connection = getConnection();
+        String SQL = "INSERT INTO clients_config(client, organization, seller_main, seller_sat, buyer_main, buyer_sat, expense_main, minimum_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(SQL);
         for (ClientConfig clientConfig : configList){
             ps.setInt(1, clientConfig.clientId());
