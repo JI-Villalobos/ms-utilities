@@ -1,10 +1,13 @@
 package org.jjv.views;
 
 import org.apache.poi.ss.usermodel.Sheet;
+import org.jjv.instances.ClientConfigInstance;
 import org.jjv.instances.ClientInstance;
 import org.jjv.instances.WorkBookInstance;
 import org.jjv.models.Client;
+import org.jjv.models.ClientConfig;
 import org.jjv.operations.ExtractOperation;
+import org.jjv.persistence.ClientConfigRepository;
 import org.jjv.persistence.ClientRepository;
 import org.jjv.persistence.Repository;
 import org.jjv.readers.ClientReader;
@@ -28,6 +31,7 @@ import static javax.swing.LayoutStyle.ComponentPlacement.*;
 
 public class ClientsView extends JFrame {
     private Repository<Client> clientRepository;
+    private Repository<ClientConfig> clientConfigRepository;
     private JButton batchLoadButton;
     private JTextField clientSelectedField;
     private JPanel clientsPanel;
@@ -44,7 +48,9 @@ public class ClientsView extends JFrame {
         setResizable(false);
         setSize(470, 500);
         clientRepository = new ClientRepository();
+        clientConfigRepository = new ClientConfigRepository();
         refreshClients();
+        loadClientConfigList();
 
         clientsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -246,6 +252,18 @@ public class ClientsView extends JFrame {
         } catch (IOException | SQLException e) {
             JOptionPane.showMessageDialog(this,
                     "Ocurrio un error inesperado: " +  e.getMessage(),
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void loadClientConfigList(){
+        try {
+            List<ClientConfig> configList = clientConfigRepository.findAllById(DefaultValues.ORGANIZATION_NUMBER);
+            ClientConfigInstance.create(configList);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Un error inesperado inhabilito la carga de configuracion de clientes: " +  e.getMessage(),
                     "ERROR",
                     JOptionPane.ERROR_MESSAGE);
         }

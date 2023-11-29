@@ -25,6 +25,7 @@ import static javax.swing.GroupLayout.PREFERRED_SIZE;
 public class ClientOptionsView extends JFrame {
     private Repository<Operator> operatorRepository;
     private Repository<ClientConfig> clientConfigRepository;
+    Integer clientId = ClientInstance.getSingle().id();
     private JButton addClientAccountsButton;
     private JButton batchOperatorsButton;
     private JLabel clienLabel;
@@ -144,8 +145,9 @@ public class ClientOptionsView extends JFrame {
     }
 
     private void setConfiguration(){
-        Integer clientId = ClientInstance.getSingle().id();
         Optional<ClientConfig> clientConfig = ClientConfigInstance.getSingle(clientId);
+        boolean isAnUpdate = clientConfig.isPresent();
+        Integer id = null;
         JTextField sellerMainAccountField = new JTextField();
         JTextField sellerSATIdentifierField = new JTextField();
         JTextField buyerMainAccountField = new JTextField();
@@ -153,7 +155,7 @@ public class ClientOptionsView extends JFrame {
         JTextField expenseMainAccountField = new JTextField();
         JTextField minimumAmountField = new JTextField();
 
-        if (clientConfig.isPresent()){
+        if (isAnUpdate){
             ClientConfig config = clientConfig.get();
             sellerMainAccountField.setText(config.sellerMainAccount());
             sellerSATIdentifierField.setText(config.sellerSATIdentifier());
@@ -161,6 +163,7 @@ public class ClientOptionsView extends JFrame {
             buyerSATIdentifierField.setText(config.buyerSATIdentifier());
             expenseMainAccountField.setText(config.expenseMainAccount());
             minimumAmountField.setText(config.minimumAmountToApply().toString());
+            id = config.id();
         }
 
         Object[] fields = {
@@ -180,15 +183,16 @@ public class ClientOptionsView extends JFrame {
         );
 
         if (confirm == JOptionPane.OK_OPTION){
-            ClientConfig config = new ClientConfig(
-                    clientId,
-                    DefaultValues.ORGANIZATION_NUMBER,
+
+            ClientConfig config = createClientConfig(
                     sellerMainAccountField.getText(),
                     sellerSATIdentifierField.getText(),
                     buyerMainAccountField.getText(),
                     buyerSATIdentifierField.getText(),
                     expenseMainAccountField.getText(),
-                    Double.parseDouble(minimumAmountField.getText())
+                    minimumAmountField.getText(),
+                    isAnUpdate,
+                    id
             );
             try {
                 clientConfigRepository.save(config);
@@ -206,6 +210,37 @@ public class ClientOptionsView extends JFrame {
 
     }
 
+    private ClientConfig createClientConfig(
+            String sellerMainAccountField, String sellerSATIdentifierField,
+            String buyerMainAccountField, String buyerSATIdentifierField,
+            String expenseMainAccountField, String minimumAmountField,
+            boolean isAnUpdate, Integer id){
+
+        if (isAnUpdate){
+            return new ClientConfig(
+                    id,
+                    clientId,
+                    DefaultValues.ORGANIZATION_NUMBER,
+                    sellerMainAccountField,
+                    sellerSATIdentifierField,
+                    buyerMainAccountField,
+                    buyerSATIdentifierField,
+                    expenseMainAccountField,
+                    Double.parseDouble(minimumAmountField)
+            );
+        } else {
+            return new ClientConfig(
+                    clientId,
+                    DefaultValues.ORGANIZATION_NUMBER,
+                    sellerMainAccountField,
+                    sellerSATIdentifierField,
+                    buyerMainAccountField,
+                    buyerSATIdentifierField,
+                    expenseMainAccountField,
+                    Double.parseDouble(minimumAmountField)
+            );
+        }
+    }
     private void updateClientConfigInstance(){
         try {
             List<ClientConfig> configList =
