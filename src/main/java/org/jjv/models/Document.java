@@ -24,8 +24,10 @@ public record Document(
     public static DocumentNature setNature(String nature){
         if (nature.equals("Emitido")){
             return DocumentNature.EMITTED;
-        } else {
+        } else if (nature.equals("Recibido")){
             return DocumentNature.RECEIVED;
+        } else {
+            return DocumentNature.NA;
         }
     }
 }

@@ -19,7 +19,6 @@ public class DocumentReader implements Reader<Document> {
         double subtotal = 0;
         double total = 0;
         double regime = 0;
-        String taxRate = "";
         Row rowIndex = sheet.getRow(1);
 
         for (int i = rowIndex.getRowNum(); i < sheet.getLastRowNum(); i++) {
