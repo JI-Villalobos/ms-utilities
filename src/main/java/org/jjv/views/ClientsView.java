@@ -240,20 +240,22 @@ public class ClientsView extends JFrame {
     }
 
     private void addClients(){
-        FileDialog.showFileDialog(this, "Carga masiva de clientes");
-        try {
-            List<Client> clients = ExtractOperation.extractClients();
-            clientRepository.saveAll(clients);
-            JOptionPane.showMessageDialog(this,
-                    clients.size() + " clientes se agregaron correctamente",
-                    "Carga exitosa",
-                    JOptionPane.INFORMATION_MESSAGE);
-            refreshClients();
-        } catch (IOException | SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Ocurrio un error inesperado: " +  e.getMessage(),
-                    "ERROR",
-                    JOptionPane.ERROR_MESSAGE);
+        boolean pathIsSelected = FileDialog.showFileDialog(this, "Carga masiva de clientes");
+        if (pathIsSelected){
+            try {
+                List<Client> clients = ExtractOperation.extractClients();
+                clientRepository.saveAll(clients);
+                JOptionPane.showMessageDialog(this,
+                        clients.size() + " clientes se agregaron correctamente",
+                        "Carga exitosa",
+                        JOptionPane.INFORMATION_MESSAGE);
+                refreshClients();
+            } catch (IOException | SQLException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Ocurrio un error inesperado: " +  e.getMessage(),
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 

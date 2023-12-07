@@ -5,7 +5,7 @@ import org.jjv.instances.PathInstance;
 import javax.swing.*;
 
 public class FileDialog {
-    public static void showFileDialog(JFrame parent, String title){
+    public static boolean showFileDialog(JFrame parent, String title){
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException |
@@ -19,6 +19,8 @@ public class FileDialog {
         if (fileChooser.showOpenDialog(parent) != JFileChooser.CANCEL_OPTION){
             String path = fileChooser.getSelectedFile().getAbsolutePath();
             PathInstance.create(path);
+            return true;
         }
+        return false;
     }
 }

@@ -35,4 +35,9 @@ public class ControllerView {
         ClientOptionsView clientOptionsView = new ClientOptionsView();
         clientOptionsView.setVisible(true);
     }
+
+    public static void connectPreAccountGenView(){
+        PreAccountGenView preAccountGenView = new PreAccountGenView();
+        preAccountGenView.setVisible(true);
+    }
 }

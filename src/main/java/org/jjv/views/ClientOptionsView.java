@@ -2,7 +2,7 @@ package org.jjv.views;
 
 import org.jjv.instances.ClientConfigInstance;
 import org.jjv.instances.ClientInstance;
-import org.jjv.instances.ConfigInstance;
+import org.jjv.instances.PathInstance;
 import org.jjv.models.ClientConfig;
 import org.jjv.models.Operator;
 import org.jjv.operations.ExtractOperation;
@@ -12,7 +12,6 @@ import org.jjv.persistence.Repository;
 import org.jjv.utils.DefaultValues;
 
 import javax.swing.*;
-
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -45,6 +44,7 @@ public class ClientOptionsView extends JFrame {
 
         batchOperatorsButton.addActionListener(e -> addOperators());
         clientConfigurationButton.addActionListener(e -> setConfiguration());
+        addClientAccountsButton.addActionListener(e -> setConfigOperation());
     }
 
     private void initComponents(){
@@ -122,25 +122,27 @@ public class ClientOptionsView extends JFrame {
     }
 
     private void addOperators(){
-        FileDialog.showFileDialog(this, "Selecciona archivo de terceros");
-        try {
-            List<Operator> operators = ExtractOperation.extractOperators();
-            int confirm = JOptionPane.showConfirmDialog(
-                    this,
-                    "Se detectaron " + operators.size() + " terceros ¿Desea registrarlos?",
-                    "Terceros", JOptionPane.OK_CANCEL_OPTION
-            );
+        boolean pathIsSelected = FileDialog.showFileDialog(this, "Selecciona archivo de terceros");
+        if (pathIsSelected){
+            try {
+                List<Operator> operators = ExtractOperation.extractOperators();
+                int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Se detectaron " + operators.size() + " terceros ¿Desea registrarlos?",
+                        "Terceros", JOptionPane.OK_CANCEL_OPTION
+                );
 
-            if (confirm == JOptionPane.OK_OPTION){
-                operatorRepository.saveAll(operators);
+                if (confirm == JOptionPane.OK_OPTION){
+                    operatorRepository.saveAll(operators);
+                    JOptionPane.showMessageDialog(this,
+                            "Terceros registrados Exitosamente",
+                            "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (IOException | SQLException e) {
                 JOptionPane.showMessageDialog(this,
-                        "Terceros registrados Exitosamente",
-                        "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
+                        "Ocurrio un error al intentar el registro: " + e.getMessage(),
+                        "ERROR", JOptionPane.ERROR_MESSAGE);
             }
-        } catch (IOException | SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Ocurrio un error al intentar el registro: " + e.getMessage(),
-                    "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -254,4 +256,11 @@ public class ClientOptionsView extends JFrame {
 
     }
 
+    private void setConfigOperation(){
+        boolean pathIsSelected = FileDialog.showFileDialog(this, "Selecciona Archivo de CFDIs");
+        if (pathIsSelected){
+            ControllerView.connectPreAccountGenView();
+            this.dispose();
+        }
+    }
 }

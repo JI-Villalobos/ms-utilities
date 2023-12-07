@@ -11,13 +11,22 @@ import org.jjv.utils.DocumentNature;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AccountMapper implements Mapper<Document, Account> {
     @Override
     public List<Account> mapTo(List<Document> documentList) {
+        AtomicReference<Integer> sellerAccountIndex = new AtomicReference<>(ClientConfigInstance.getTempConfig().get(DocumentNature.RECEIVED));
+        AtomicReference<Integer> buyerAccountIndex = new AtomicReference<>(ClientConfigInstance.getTempConfig().get(DocumentNature.EMITTED));
         List<Account> accounts = new ArrayList<>();
         documentList.forEach(document -> {
-            accounts.add(createAccount(document));
+            if (document.nature().equals(DocumentNature.EMITTED)){
+                accounts.add(createAccount(document, buyerAccountIndex.get()));
+                buyerAccountIndex.getAndSet(buyerAccountIndex.get() + 1);
+            } else {
+                accounts.add(createAccount(document, sellerAccountIndex.get()));
+                sellerAccountIndex.getAndSet(sellerAccountIndex.get() + 1);
+            }
         });
         return accounts;
     }
@@ -51,7 +60,7 @@ public class AccountMapper implements Mapper<Document, Account> {
             return DefaultValues.PROVIDER;
         }
     }
-    private Account createAccount(Document document){
+    private Account createAccount(Document document, Integer index){
         String mainAccount = setMainAccount(document.nature());
         String satCode = setCodeSat(document.nature());
         int accountNature = setAccountNature(document.nature());
@@ -59,15 +68,16 @@ public class AccountMapper implements Mapper<Document, Account> {
         return new Account(
                 document.nature(),
                 mainAccount,
-                0,
-                mainAccount.concat("."),
+                index,
+                mainAccount.concat(".").concat(Integer.toString(index)),
                 document.name(),
                 document.rfc(),
                 document.regime(),
                 document.taxRate().toString(),
                 DefaultValues.CLIENT_PROVIDER,
                 accountNature,
-                satCode
+                satCode,
+                document.total()
         );
     }
 }

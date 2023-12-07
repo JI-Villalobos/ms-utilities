@@ -13,6 +13,7 @@ public record Account(
         String taxRate,
         int accountType,
         int accountNature,
-        String satCode
+        String satCode,
+        Double total
 ) {
 }
