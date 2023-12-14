@@ -1,8 +1,10 @@
 package org.jjv.views;
 
+import org.jjv.operations.ProcessData;
 import org.jjv.utils.Config;
 
 import javax.swing.*;
+import java.io.IOException;
 
 public class ControllerView {
     public static void selectInitialView(){
@@ -39,5 +41,21 @@ public class ControllerView {
     public static void connectPreAccountGenView(){
         PreAccountGenView preAccountGenView = new PreAccountGenView();
         preAccountGenView.setVisible(true);
+    }
+
+    public static void connectAccountCreationView(JFrame parent){
+        try {
+          ProcessData.processAccounts();
+          AccountCreationView accountCreationView = new AccountCreationView();
+          accountCreationView.setVisible(true);
+          parent.dispose();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(
+                    parent,
+                    "Error al procesar CFDIs: " + e.getMessage(),
+                    "ERROR",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 }

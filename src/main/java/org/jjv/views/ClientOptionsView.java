@@ -2,6 +2,7 @@ package org.jjv.views;
 
 import org.jjv.instances.ClientConfigInstance;
 import org.jjv.instances.ClientInstance;
+import org.jjv.instances.OperatorInstance;
 import org.jjv.instances.PathInstance;
 import org.jjv.models.ClientConfig;
 import org.jjv.models.Operator;
@@ -14,8 +15,10 @@ import org.jjv.utils.DefaultValues;
 import javax.swing.*;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static javax.swing.GroupLayout.Alignment.*;
 import static javax.swing.GroupLayout.DEFAULT_SIZE;
@@ -38,9 +41,12 @@ public class ClientOptionsView extends JFrame {
         setLocationRelativeTo(null);
         setTitle("Operaciones con Clientes");
         setResizable(false);
+
         operatorRepository = new OperatorRepository();
         clientConfigRepository = new ClientConfigRepository();
         clientField.setText(ClientInstance.getSingle().name());
+
+        loadOperators();
 
         batchOperatorsButton.addActionListener(e -> addOperators());
         clientConfigurationButton.addActionListener(e -> setConfiguration());
@@ -261,6 +267,19 @@ public class ClientOptionsView extends JFrame {
         if (pathIsSelected){
             ControllerView.connectPreAccountGenView();
             this.dispose();
+        }
+    }
+
+    private void loadOperators(){
+        try {
+            List<Operator> operators = operatorRepository.findAllById(ClientInstance.getSingle().id());
+            Set<String> operatorRFC = new HashSet<>();
+            operators.forEach(operator -> operatorRFC.add(operator.rfc()));
+            OperatorInstance.create(operatorRFC);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ocurrio un error al intentar cargar terceros: " + e.getMessage(),
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

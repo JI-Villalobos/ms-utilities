@@ -31,6 +31,7 @@ public class PreAccountGenView extends JFrame {
         applyButton.addActionListener(e -> {
             if (!clientField.getText().isEmpty() && !provField.getText().isEmpty()){
                 applyConfig();
+                ControllerView.connectAccountCreationView(this);
             }
         });
     }

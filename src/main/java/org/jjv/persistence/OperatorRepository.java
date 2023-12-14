@@ -54,8 +54,9 @@ public class OperatorRepository implements Repository<Operator> {
     @Override
     public List<Operator> findAllById(Integer id) throws SQLException {
         Connection connection = getConnection();
-        String sql = "SELECT * FROM operators WHERE id = ?";
+        String sql = "SELECT * FROM operators WHERE client = ?";
         PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, id);
         ResultSet resultSet = ps.executeQuery();
 
         return createOperatorList(resultSet);
