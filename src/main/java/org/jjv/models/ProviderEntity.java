@@ -2,6 +2,7 @@ package org.jjv.models;
 
 import org.jjv.models.Entity;
 import org.jjv.utils.EntityNature;
+import org.jjv.utils.TaxRate;
 
 public class ProviderEntity extends Entity {
     private String providerAccount;
@@ -61,5 +62,13 @@ public class ProviderEntity extends Entity {
 
     public void setTaxKey(String taxKey) {
         this.taxKey = taxKey;
+    }
+
+    public static String computeTaxKey(String taxRate){
+        if (taxRate.equals(TaxRate.TAX_0.toString())){
+            return "222";
+        } else {
+            return "111";
+        }
     }
 }

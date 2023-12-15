@@ -1,5 +1,6 @@
 package org.jjv.models;
 
+import org.jjv.utils.DefaultValues;
 import org.jjv.utils.EntityNature;
 
 public class ClientEntity extends Entity{
@@ -40,5 +41,15 @@ public class ClientEntity extends Entity{
 
     public void setPolicyType(String policyType) {
         this.policyType = policyType;
+    }
+
+    public static String computeRegime(String rfc){
+        if (setEntityNature(rfc).equals(EntityNature.F)){
+            return DefaultValues.DEFAULT_F_CODE_REGIME;
+        } else if (setEntityNature(rfc).equals(EntityNature.M)) {
+            return DefaultValues.DEFAULT_M_CODE_REGIME;
+        } else {
+            return "";
+        }
     }
 }

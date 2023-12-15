@@ -86,4 +86,15 @@ public class Entity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public static EntityNature setEntityNature(String rfc){
+        if (rfc.length() == 13)
+            return EntityNature.F;
+        else if (rfc.length() == 12) {
+            return EntityNature.M;
+        } else {
+            return EntityNature.NA;
+        }
+    }
+
 }
