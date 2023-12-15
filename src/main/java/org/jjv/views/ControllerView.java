@@ -1,6 +1,6 @@
 package org.jjv.views;
 
-import org.jjv.operations.ProcessData;
+import org.jjv.operations.DataProcessor;
 import org.jjv.utils.Config;
 
 import javax.swing.*;
@@ -45,7 +45,7 @@ public class ControllerView {
 
     public static void connectAccountCreationView(JFrame parent){
         try {
-          ProcessData.processAccounts();
+          DataProcessor.processAccounts();
           AccountCreationView accountCreationView = new AccountCreationView();
           accountCreationView.setVisible(true);
           parent.dispose();
