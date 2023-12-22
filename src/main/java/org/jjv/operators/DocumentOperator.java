@@ -10,17 +10,31 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class DocumentOperator {
     Function<List<Document>, List<Document>> clearDuplicatedData = documentList -> {
         List<Document> cleanedList = new ArrayList<>();
-        Set<String> identifiersFounded = new HashSet<>();
-
+        Set<String> identifiersFound = new HashSet<>();
+        
         documentList.forEach(document -> {
-            if (!identifiersFounded.contains(document.rfc())){
-                cleanedList.add(document);
-                identifiersFounded.add(document.rfc());
-            }
+            identifiersFound.add(document.rfc());
+        });
+
+        identifiersFound.forEach(identifier -> {
+            List<Document> filteredList = documentList.stream().filter(document -> document.rfc()
+                    .equals(identifier)).toList();
+            Double subTotal = filteredList.stream().reduce(0.0, (st, document) -> st + document.subtotal(), Double::sum);
+            Double total = filteredList.stream().reduce(0.0, (t, document) -> t + document.total(), Double::sum);
+            Document document = filteredList.get(0);
+
+            cleanedList.add(new Document(
+                    document.nature(), document.rfc(),
+                    document.name(), subTotal, total,
+                    document.regime(), Document.setTaxRate(total, subTotal))
+            );
+
+            filteredList.forEach(cleanedList::remove);
         });
         return cleanedList;
     };
