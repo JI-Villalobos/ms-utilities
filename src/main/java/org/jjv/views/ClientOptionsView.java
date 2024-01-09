@@ -177,7 +177,7 @@ public class ClientOptionsView extends JFrame {
         Object[] fields = {
                 "Cuenta padre Proveedor", sellerMainAccountField,
                 "Codigo SAT", sellerSATIdentifierField,
-                "Cuenta padre Cliente", buyerMainAccountField,
+                "Cuenta principal ventas", buyerMainAccountField,
                 "Codigo SAT", buyerSATIdentifierField,
                 "Cuenta pricipal gastos", expenseMainAccountField,
                 "Aplicar gastos a monto mayor a:", minimumAmountField,

@@ -4,8 +4,10 @@ import org.jjv.instances.AccountInstance;
 import org.jjv.instances.EntityInstance;
 import org.jjv.models.Account;
 import org.jjv.models.ClientEntity;
+import org.jjv.models.ExtendedProviderEntity;
 import org.jjv.models.ProviderEntity;
 import org.jjv.operators.ClientEntityMapper;
+import org.jjv.operators.ExtendedProviderEntityMapper;
 import org.jjv.operators.Filter;
 import org.jjv.operators.ProviderEntityMapper;
 import org.jjv.utils.DocumentNature;
@@ -31,5 +33,14 @@ public class EntityProcessor {
         List<ProviderEntity> providerEntityList = mapper.mapTo(providerAccounts);
 
         EntityInstance.createProviders(providerEntityList);
+    }
+
+    public static void setExtendedProviderEntities(){
+        Filter filter = new Filter();
+        ExtendedProviderEntityMapper mapper = new ExtendedProviderEntityMapper();
+        List<Account> providerAccounts = filter.filter(accounts, DocumentNature.RECEIVED);
+        List<ExtendedProviderEntity> providerEntityList = mapper.mapTo(providerAccounts);
+
+        EntityInstance.createExtendedProviders(providerEntityList);
     }
 }

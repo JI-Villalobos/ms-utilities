@@ -60,7 +60,6 @@ public class DocumentOperator {
         return clearDuplicatedData.apply(documents);
     }
 
-    //TODO: get operators from an instance
     private Set<String> setOperators(){
         return OperatorInstance.get();
     }

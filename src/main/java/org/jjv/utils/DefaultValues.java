@@ -12,4 +12,9 @@ public class DefaultValues {
     public static final String PROVIDER_DESCRIPTION = "GASTOS DEL MES";
     public static final String DEFAULT_F_CODE_REGIME = "612";
     public static final String DEFAULT_M_CODE_REGIME = "601";
+    public static final String NATIONAL = "04";
+    public static final String FOREIGN = "05";
+    public static final String PROVISION_OF_SERVICES = "03";
+    public static final String LEASE = "06";
+    public static final String OTHER_SERVICES = "85";
 }
