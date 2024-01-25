@@ -50,6 +50,10 @@ public class AccountCreationView extends JFrame {
             }
         });
         createTXTButton.addActionListener(e -> generateTXT());
+        operatorModelButton.addActionListener(e -> {
+            ControllerView.connectEntityProcessorView();
+            this.dispose();
+        });
     }
 
     private void initComponents(){

@@ -1,10 +1,15 @@
 package org.jjv.views;
 
+import org.jjv.instances.AccountInstance;
+import org.jjv.models.Account;
 import org.jjv.operations.DataProcessor;
+import org.jjv.operations.EntityProcessor;
 import org.jjv.utils.Config;
+import org.jjv.utils.DocumentNature;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.util.List;
 
 public class ControllerView {
     public static void selectInitialView(){
@@ -46,6 +51,9 @@ public class ControllerView {
     public static void connectAccountCreationView(JFrame parent){
         try {
           DataProcessor.processAccounts();
+          //remove after test
+            List<Account> accounts = AccountInstance.get();
+            accounts.forEach(System.out::println);
           AccountCreationView accountCreationView = new AccountCreationView();
           accountCreationView.setVisible(true);
           parent.dispose();
@@ -57,5 +65,19 @@ public class ControllerView {
                     JOptionPane.ERROR_MESSAGE
             );
         }
+    }
+    public static void connectEntityProcessorView(){
+        EntityProcessorView entityProcessorView = new EntityProcessorView();
+        entityProcessorView.setVisible(true);
+    }
+
+    public static void connectOperatorCreationView(DocumentNature nature){
+        if (nature.equals(DocumentNature.EMITTED)){
+            EntityProcessor.setClientEntities();
+        } else {
+            EntityProcessor.setExtendedProviderEntities();
+        }
+        OperatorCreationView operatorCreationView = new OperatorCreationView(nature);
+        operatorCreationView.setVisible(true);
     }
 }

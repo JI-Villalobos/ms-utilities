@@ -29,6 +29,7 @@ public class OperatorRepository implements Repository<Operator> {
     @Override
     public void saveAll(List<Operator> operators) throws SQLException {
         Connection connection = getConnection();
+        connection.setAutoCommit(false);
         PreparedStatement ps = connection.prepareStatement(INSERT_ST);
         for (Operator operator : operators){
             ps.setString(1, operator.name());
@@ -38,7 +39,8 @@ public class OperatorRepository implements Repository<Operator> {
         }
 
         ps.executeBatch();
-        ps.close();
+
+        connection.commit();
     }
 
     @Override

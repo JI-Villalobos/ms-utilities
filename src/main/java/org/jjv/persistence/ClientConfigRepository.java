@@ -44,6 +44,7 @@ public class ClientConfigRepository implements Repository<ClientConfig> {
     @Override
     public void saveAll(List<ClientConfig> configList) throws SQLException {
         Connection connection = getConnection();
+        connection.setAutoCommit(false);
         String SQL = "INSERT INTO clients_config(client, organization, seller_main, seller_sat, buyer_main, buyer_sat, expense_main, minimum_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(SQL);
         for (ClientConfig clientConfig : configList){
@@ -60,7 +61,7 @@ public class ClientConfigRepository implements Repository<ClientConfig> {
         }
 
         ps.executeBatch();
-        connection.close();
+        connection.commit();
     }
 
     @Override
