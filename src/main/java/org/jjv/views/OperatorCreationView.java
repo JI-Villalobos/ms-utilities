@@ -1,13 +1,16 @@
 package org.jjv.views;
 
 import org.jjv.instances.EntityInstance;
+import org.jjv.instances.OperatorInstance;
 import org.jjv.models.ClientEntity;
 import org.jjv.models.ExtendedProviderEntity;
 import org.jjv.utils.DocumentNature;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.Color;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 import static java.lang.Short.*;
@@ -31,6 +34,22 @@ public class OperatorCreationView extends JFrame {
         setLocationRelativeTo(null);
         initComponents();
         setSchema(nature);
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2){
+                    Point point = e.getPoint();
+                    int row = table.rowAtPoint(point);
+                    String rfc = table.getValueAt(row, 1).toString();
+                    if (nature.equals(DocumentNature.EMITTED)){
+                        updateClientOperator(rfc);
+                    } else {
+                        updateProviderOperator(rfc);
+                    }
+                }
+            }
+        });
     }
 
     private void initComponents(){
@@ -79,20 +98,6 @@ public class OperatorCreationView extends JFrame {
                                 .addComponent(saveButton, DEFAULT_SIZE, 38, MAX_VALUE)
                                 .addContainerGap())
         );
-
-        /*table.setModel(new javax.swing.table.DefaultTableModel(
-                new Object [][] {
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null}
-                },
-                new String [] {
-                        "Title 1", "Title 2", "Title 3", "Title 4"
-                }
-        ));
-        scrollPanel.setViewportView(table);*/
-
         GroupLayout mainPanelLayout = new GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
         mainPanelLayout.setHorizontalGroup(
@@ -200,7 +205,7 @@ public class OperatorCreationView extends JFrame {
         return new Object[]{
                 providerEntity.getName(),
                 providerEntity.getRfc(),
-                providerEntity.getDescription(),
+                providerEntity.getNature(),
                 providerEntity.getRegime(),
                 providerEntity.getNationality(),
                 providerEntity.isProvider(),
@@ -216,4 +221,83 @@ public class OperatorCreationView extends JFrame {
         };
     }
 
+    private void updateClientOperator(String rfc){
+        JTextField nameField = new JTextField();
+        JTextField regimeField = new JTextField();
+        JTextField incomeField = new JTextField();
+
+        List<ClientEntity> clientEntities = EntityInstance.getClientEntities();
+        ClientEntity clientEntity = clientEntities.stream()
+                .filter(cl -> cl.getRfc().equals(rfc))
+                .findFirst()
+                .orElse(null);
+
+        int index;
+
+        if (clientEntity != null){
+            nameField.setText(clientEntity.getName());
+            regimeField.setText(clientEntity.getRegime());
+            incomeField.setText(clientEntity.getIncomeAccount());
+
+            index = clientEntities.indexOf(clientEntity);
+
+            Object[] fields = {
+                    "Nombre del Tercero", nameField,
+                    "Regimen Fiscal", regimeField,
+                    "Cuenta de ventas", incomeField
+            };
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    this, fields, "Modificar Tercero", JOptionPane.OK_CANCEL_OPTION
+            );
+
+            if (confirm == JOptionPane.OK_OPTION){
+                clientEntity.setName(nameField.getText());
+                clientEntity.setRegime(regimeField.getText());
+                clientEntity.setClientAccount(incomeField.getText());
+
+                setSchema(DocumentNature.EMITTED);
+            }
+        }
+    }
+
+    private void updateProviderOperator(String rfc){
+        JTextField nameField = new JTextField();
+        JTextField regimeField = new JTextField();
+        JTextField expenseField = new JTextField();
+
+        List<ExtendedProviderEntity> providerEntities = EntityInstance.getExtendedProviderEntityList();
+        ExtendedProviderEntity providerEntity = providerEntities.stream()
+                .filter(cl -> cl.getRfc().equals(rfc))
+                .findFirst()
+                .orElse(null);
+
+        int index;
+
+        if (providerEntity != null){
+            nameField.setText(providerEntity.getName());
+            regimeField.setText(providerEntity.getRegime());
+            expenseField.setText(providerEntity.getExpenseAccount());
+
+            index = providerEntities.indexOf(providerEntity);
+
+            Object[] fields = {
+                    "Nombre del Tercero", nameField,
+                    "Regimen Fiscal", regimeField,
+                    "Cuenta de gastos", expenseField
+            };
+
+            int confirm = JOptionPane.showConfirmDialog(
+                    this, fields, "Modificar Tercero", JOptionPane.OK_CANCEL_OPTION
+            );
+
+            if (confirm == JOptionPane.OK_OPTION){
+                providerEntity.setName(nameField.getText());
+                providerEntity.setRegime(regimeField.getText());
+                providerEntity.setExpenseAccount(expenseField.getText());
+
+                setSchema(DocumentNature.RECEIVED);
+            }
+        }
+    }
 }
