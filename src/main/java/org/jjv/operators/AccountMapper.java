@@ -60,6 +60,10 @@ public class AccountMapper implements Mapper<Document, Account> {
             return DefaultValues.PROVIDER;
         }
     }
+
+    private static String deleteFloatChars(String regime){
+        return regime.substring(0, 3);
+    }
     private Account createAccount(Document document, Integer index){
         String mainAccount = setMainAccount(document.nature());
         String satCode = setCodeSat(document.nature());
@@ -72,7 +76,7 @@ public class AccountMapper implements Mapper<Document, Account> {
                 mainAccount.concat(".").concat(Integer.toString(index)),
                 document.name(),
                 document.rfc(),
-                document.regime(),
+                deleteFloatChars(document.regime()),
                 document.taxRate().toString(),
                 DefaultValues.CLIENT_PROVIDER,
                 accountNature,
