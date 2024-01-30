@@ -2,6 +2,7 @@ package org.jjv.views;
 
 import org.jjv.instances.EntityInstance;
 import org.jjv.instances.OperatorInstance;
+import org.jjv.instances.TaskCompleteInstance;
 import org.jjv.models.ClientEntity;
 import org.jjv.models.ExtendedProviderEntity;
 import org.jjv.utils.DocumentNature;
@@ -50,6 +51,12 @@ public class OperatorCreationView extends JFrame {
                 }
             }
         });
+
+        saveButton.addActionListener(e -> {
+                updateStatus(nature);
+                this.dispose();
+            }
+        );
     }
 
     private void initComponents(){
@@ -298,6 +305,14 @@ public class OperatorCreationView extends JFrame {
 
                 setSchema(DocumentNature.RECEIVED);
             }
+        }
+    }
+
+    private void updateStatus(DocumentNature mode){
+        if (mode.equals(DocumentNature.EMITTED)){
+            TaskCompleteInstance.completeClientProcess();
+        } else {
+            TaskCompleteInstance.completeProviderProcess();
         }
     }
 }
