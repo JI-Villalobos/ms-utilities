@@ -1,5 +1,7 @@
 package org.jjv.views;
 
+import org.jjv.generators.Generator;
+import org.jjv.instances.PathInstance;
 import org.jjv.instances.TaskCompleteInstance;
 import org.jjv.utils.DocumentNature;
 
@@ -8,6 +10,7 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.io.IOException;
 
 import static java.lang.Short.*;
 import static javax.swing.GroupLayout.*;
@@ -51,6 +54,31 @@ public class EntityProcessorView extends JFrame {
                 e -> ControllerView.connectOperatorCreationView(DocumentNature.EMITTED));
         processProvidersButton.addActionListener(
                 e -> ControllerView.connectOperatorCreationView(DocumentNature.RECEIVED));
+        completeTXTButton.addActionListener(e -> generateTXT());
+    }
+
+    private void generateTXT() {
+        boolean selectedPath = FileDialog.showFileDialog(this, "Selecciona ubicación del archivo a guardar");
+        if (selectedPath){
+            String path = PathInstance.getPath();
+            String filePath = path.concat(".txt");
+            PathInstance.create(filePath);
+
+            try {
+                Generator.generateOperatorsFile();
+                JOptionPane.showMessageDialog(this,
+                        "Archivo de Terceros generado exitosamente",
+                        "Operacion Exitosa",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this,
+                        "Algun error inesperado provoco que no fuse posible generar el .txt",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
     }
 
     private void initComponents(){
