@@ -32,21 +32,29 @@ public class Generator{
         clientEntities.forEach(client -> {
             printWriter.println(
                     client.getName() + "," + client.getRfc() + "," + client.getNature() + "," + client.getRegime()
-                            + "," + sep + "," + client.isProvider() + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + ","
-                            + client.isClient() + "," + client.getClientAccount()  + "," + client.getIncomeAccount() + ","
-                            + client.getPolicyType() + "," + client.getDescription() + "," + client.isContractor()
+                            + "," + sep + "," + setResult(client.isProvider()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + ","
+                            + setResult(client.isClient()) + "," + client.getClientAccount()  + "," + client.getIncomeAccount() + ","
+                            + client.getPolicyType() + "," + client.getDescription() + "," + setResult(client.isContractor())
             );
         });
         providerEntities.forEach(provider -> {
             printWriter.println(
                     provider.getName() + "," + provider.getRfc() + "," + provider.getNature() + "," + provider.getRegime()
-                            + "," + provider.getNationality() + "," + provider.isProvider() + "," + provider.getProviderAccount()
+                            + "," + provider.getNationality() + "," + setResult(provider.isProvider()) + "," + provider.getProviderAccount()
                             + "," + provider.getExpenseAccount() + "," + provider.getPolicyType() + "," + provider.getDescription()
                             + "," + provider.getCountry() + "," + provider.getDIOTOperation() + provider.getTaxKey()
-                            + "," + provider.isClient() + "," + sep + "," + sep + "," + sep + "," + sep + "," + provider.isContractor()
+                            + "," + setResult(provider.isClient()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + setResult(provider.isContractor())
 
             );
         });
         printWriter.close();
+    }
+
+    private static String setResult(boolean result){
+        if (result){
+            return "S";
+        } else {
+            return "N";
+        }
     }
 }
