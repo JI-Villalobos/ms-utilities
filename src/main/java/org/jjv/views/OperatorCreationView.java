@@ -5,6 +5,7 @@ import org.jjv.instances.OperatorInstance;
 import org.jjv.instances.TaskCompleteInstance;
 import org.jjv.models.ClientEntity;
 import org.jjv.models.ExtendedProviderEntity;
+import org.jjv.operations.CollectOperators;
 import org.jjv.utils.DocumentNature;
 
 import javax.swing.*;
@@ -311,8 +312,10 @@ public class OperatorCreationView extends JFrame {
     private void updateStatus(DocumentNature mode){
         if (mode.equals(DocumentNature.EMITTED)){
             TaskCompleteInstance.completeClientProcess();
+            CollectOperators.collectFromClientEntities();
         } else {
             TaskCompleteInstance.completeProviderProcess();
+            CollectOperators.collectFromProviderEntities();
         }
     }
 }

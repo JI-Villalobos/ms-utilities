@@ -1,8 +1,12 @@
 package org.jjv.views;
 
 import org.jjv.generators.Generator;
+import org.jjv.instances.OperatorInstance;
 import org.jjv.instances.PathInstance;
 import org.jjv.instances.TaskCompleteInstance;
+import org.jjv.models.Operator;
+import org.jjv.persistence.OperatorRepository;
+import org.jjv.persistence.Repository;
 import org.jjv.utils.DocumentNature;
 
 import javax.swing.*;
@@ -11,6 +15,8 @@ import java.awt.Color;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 import static java.lang.Short.*;
 import static javax.swing.GroupLayout.*;
@@ -24,6 +30,7 @@ public class EntityProcessorView extends JFrame {
     private JButton processClientsButton;
     private JButton processProvidersButton;
     private JCheckBox providerCheckBox;
+    private Repository<Operator> operatorRepository;
 
     public EntityProcessorView(){
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -50,6 +57,8 @@ public class EntityProcessorView extends JFrame {
             }
         });
 
+        operatorRepository = new OperatorRepository();
+
         processClientsButton.addActionListener(
                 e -> ControllerView.connectOperatorCreationView(DocumentNature.EMITTED));
         processProvidersButton.addActionListener(
@@ -66,11 +75,14 @@ public class EntityProcessorView extends JFrame {
 
             try {
                 Generator.generateOperatorsFile();
-                JOptionPane.showMessageDialog(this,
-                        "Archivo de Terceros generado exitosamente",
-                        "Operacion Exitosa",
-                        JOptionPane.INFORMATION_MESSAGE
+                int confirm = JOptionPane.showConfirmDialog(
+                        this,
+                        "Archivo de Terceros generado exitosamente, confirme si desea registrarlos.",
+                        "Terceros", JOptionPane.OK_CANCEL_OPTION
                 );
+                if (confirm == JOptionPane.OK_OPTION){
+                    saveOperators();
+                }
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
                         "Algun error inesperado provoco que no fuse posible generar el .txt",
@@ -163,5 +175,19 @@ public class EntityProcessorView extends JFrame {
         );
 
         pack();
+    }
+
+    private void saveOperators(){
+        List<Operator> operators = OperatorInstance.getOperatorList();
+        try {
+            operatorRepository.saveAll(operators);
+            JOptionPane.showMessageDialog(this,
+                    "Terceros registrados exitosamente",
+                    "ERROR", JOptionPane.INFORMATION_MESSAGE);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Ocurrio un error al intentar el registro: " + e.getMessage(),
+                    "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

@@ -2,6 +2,7 @@ package org.jjv.instances;
 
 import org.jjv.models.Operator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -16,6 +17,9 @@ public class OperatorInstance {
         return operators;
     }
     public static void addOperators(List<Operator> operators){
+        if (operatorList == null){
+            operatorList = new ArrayList<>();
+        }
         operatorList.addAll(operators);
     }
     public static List<Operator> getOperatorList(){
