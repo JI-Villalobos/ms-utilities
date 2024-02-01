@@ -144,6 +144,7 @@ public class ClientOptionsView extends JFrame {
                             "Terceros registrados Exitosamente",
                             "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
                 }
+                loadOperators();
             } catch (IOException | SQLException e) {
                 JOptionPane.showMessageDialog(this,
                         "Ocurrio un error al intentar el registro: " + e.getMessage(),
