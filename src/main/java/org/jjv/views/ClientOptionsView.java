@@ -30,8 +30,6 @@ public class ClientOptionsView extends JFrame {
     Integer clientId = ClientInstance.getSingle().id();
     private JButton addClientAccountsButton;
     private JButton batchOperatorsButton;
-    private JLabel clienLabel;
-    private JPanel clientOptionsPanel;
     private JButton clientConfigurationButton;
     private JTextField clientField;
 
@@ -54,14 +52,14 @@ public class ClientOptionsView extends JFrame {
     }
 
     private void initComponents(){
-        clientOptionsPanel = new JPanel();
-        clienLabel = new JLabel();
+        JPanel clientOptionsPanel = new JPanel();
+        JLabel clientLabel = new JLabel();
         clientField = new JTextField();
         batchOperatorsButton = new JButton();
         clientConfigurationButton = new JButton();
         addClientAccountsButton = new JButton();
         
-        clienLabel.setText("CLIENTE:");
+        clientLabel.setText("CLIENTE:");
 
         clientField.setEditable(false);
 
@@ -84,7 +82,7 @@ public class ClientOptionsView extends JFrame {
                         .addGroup(clientOptionsPanelLayout.createSequentialGroup()
                                 .addGap(50, 50, 50)
                                 .addGroup(clientOptionsPanelLayout.createParallelGroup(TRAILING)
-                                        .addComponent(clienLabel, PREFERRED_SIZE, 50, PREFERRED_SIZE)
+                                        .addComponent(clientLabel, PREFERRED_SIZE, 50, PREFERRED_SIZE)
                                         .addComponent(batchOperatorsButton, PREFERRED_SIZE, 92, PREFERRED_SIZE))
                                 .addGroup(clientOptionsPanelLayout.createParallelGroup(LEADING)
                                         .addGroup(clientOptionsPanelLayout.createSequentialGroup()
@@ -102,7 +100,7 @@ public class ClientOptionsView extends JFrame {
                         .addGroup(clientOptionsPanelLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(clientOptionsPanelLayout.createParallelGroup(BASELINE)
-                                        .addComponent(clienLabel)
+                                        .addComponent(clientLabel)
                                         .addComponent(clientField, PREFERRED_SIZE, DEFAULT_SIZE, PREFERRED_SIZE))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                                 .addGroup(clientOptionsPanelLayout.createParallelGroup(LEADING)

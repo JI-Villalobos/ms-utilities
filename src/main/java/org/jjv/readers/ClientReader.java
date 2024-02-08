@@ -15,7 +15,7 @@ public class ClientReader implements Reader<Client> {
         List<Client> clients = new ArrayList<>();
         Row index = sheet.getRow(1);
         String clientName = "";
-        for (int i = index.getRowNum(); i < sheet.getLastRowNum(); i++) {
+        for (int i = index.getRowNum(); i < sheet.getLastRowNum() + 1; i++) {
             Row row = sheet.getRow(i);
             for (int j = 0; j < 1; j++) {
                 Cell cell = row.getCell(j);

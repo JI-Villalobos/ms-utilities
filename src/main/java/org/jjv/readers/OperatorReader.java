@@ -18,7 +18,7 @@ public class OperatorReader implements Reader<Operator> {
         Integer clientId = ClientInstance.getSingle().id();
         Row rowIndex = sheet.getRow(1);
 
-        for (int i = rowIndex.getRowNum(); i < sheet.getLastRowNum(); i++) {
+        for (int i = rowIndex.getRowNum(); i < sheet.getLastRowNum() + 1; i++) {
             Row row = sheet.getRow(i);
             for (int j = 0; j < 2; j++) {
                 Cell cell = row.getCell(j);
