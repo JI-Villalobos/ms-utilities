@@ -33,8 +33,6 @@ public class DocumentOperator {
                     document.name(), subTotal, total,
                     document.regime(), Document.setTaxRate(total, subTotal))
             );
-
-            filteredList.forEach(cleanedList::remove);
         });
         return cleanedList;
     };
