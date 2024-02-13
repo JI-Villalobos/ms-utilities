@@ -19,9 +19,9 @@ public class ClientConfigRepository implements Repository<ClientConfig> {
     public void save(ClientConfig clientConfig) throws SQLException {
         String sql;
         if (clientConfig.id() != null && clientConfig.id() > 0){
-            sql = "UPDATE clients_config SET client=?, organization=?, seller_main=?, seller_sat=?, buyer_main=?, buyer_sat=?, expense_main=?, minimum_amount=? WHERE id=?";
+            sql = "UPDATE clients_config SET client=?, organization=?, seller_main=?, seller_sat=?, buyer_main=?, buyer_sat=?, expense_main=?, minimum_amount=?, income_main=? WHERE id=?";
         } else {
-            sql = "INSERT INTO clients_config(client, organization, seller_main, seller_sat, buyer_main, buyer_sat, expense_main, minimum_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+            sql = "INSERT INTO clients_config(client, organization, seller_main, seller_sat, buyer_main, buyer_sat, expense_main, minimum_amount, income_main) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         }
         Connection connection = getConnection();
         PreparedStatement ps = connection.prepareStatement(sql);
@@ -33,8 +33,9 @@ public class ClientConfigRepository implements Repository<ClientConfig> {
         ps.setString(6, clientConfig.buyerSATIdentifier());
         ps.setString(7, clientConfig.expenseMainAccount());
         ps.setDouble(8, clientConfig.minimumAmountToApply());
+        ps.setString(9, clientConfig.incomeMainAccount());
         if (clientConfig.id() != null && clientConfig.id() > 0){
-            ps.setInt(9, clientConfig.id());
+            ps.setInt(10, clientConfig.id());
         }
         ps.executeUpdate();
 
@@ -45,7 +46,7 @@ public class ClientConfigRepository implements Repository<ClientConfig> {
     public void saveAll(List<ClientConfig> configList) throws SQLException {
         Connection connection = getConnection();
         connection.setAutoCommit(false);
-        String SQL = "INSERT INTO clients_config(client, organization, seller_main, seller_sat, buyer_main, buyer_sat, expense_main, minimum_amount) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String SQL = "INSERT INTO clients_config(client, organization, seller_main, seller_sat, buyer_main, buyer_sat, expense_main, minimum_amount, income_main) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(SQL);
         for (ClientConfig clientConfig : configList){
             ps.setInt(1, clientConfig.clientId());
@@ -56,6 +57,7 @@ public class ClientConfigRepository implements Repository<ClientConfig> {
             ps.setString(6, clientConfig.buyerSATIdentifier());
             ps.setString(7, clientConfig.expenseMainAccount());
             ps.setDouble(8, clientConfig.minimumAmountToApply());
+            ps.setString(9, clientConfig.incomeMainAccount());
 
             ps.addBatch();
         }
@@ -103,7 +105,8 @@ public class ClientConfigRepository implements Repository<ClientConfig> {
                     resultSet.getString("buyer_main"),
                     resultSet.getString("buyer_sat"),
                     resultSet.getString("expense_main"),
-                    resultSet.getDouble("minimum_amount")
+                    resultSet.getDouble("minimum_amount"),
+                    resultSet.getString("income_main")
             ));
         }
         return configList;

@@ -30,14 +30,14 @@ public class ExtendedProviderEntityMapper implements Mapper<Account, ExtendedPro
                 account.name(), account.rfc(), ProviderEntity.setEntityNature(account.rfc()),
                 true, false, false,
                 account.regime(), DefaultValues.PROVIDER_DESCRIPTION, account.subAccount(),
-                applyEntityAccount(account.total()), "D", config.buyerSATIdentifier(),
+                applyEntityExpenseAccount(account.total()), "D", config.buyerSATIdentifier(),
                 ProviderEntity.computeTaxKey(account.taxRate()), DefaultValues.NATIONAL,
                 CountryCode.MX, DefaultValues.OTHER_SERVICES
         );
     }
-    private String applyEntityAccount(Double total) {
+    private String applyEntityExpenseAccount(Double total) {
         if (total >= config.minimumAmountToApply()) {
-            return config.sellerSATIdentifier();
+            return config.expenseMainAccount();
         } else {
             return "";
         }

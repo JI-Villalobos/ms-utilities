@@ -28,7 +28,7 @@ public class ClientEntityMapper implements Mapper<Account, ClientEntity> {
                 ClientEntity.setEntityNature(account.rfc()),
                 false, true, false,
                 ClientEntity.computeRegime(account.rfc()), DefaultValues.CLIENT_DESCRIPTION, account.subAccount(),
-                config.buyerMainAccount(), "D"
+                config.incomeMainAccount(), "D"
         );
     }
 

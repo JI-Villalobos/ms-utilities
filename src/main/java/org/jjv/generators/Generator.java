@@ -29,24 +29,28 @@ public class Generator{
         List<ClientEntity> clientEntities = EntityInstance.getClientEntities();
         List<ExtendedProviderEntity> providerEntities = EntityInstance.getExtendedProviderEntityList();
         PrintWriter printWriter = new PrintWriter(PathInstance.getPath(), StandardCharsets.UTF_8);
-        clientEntities.forEach(client -> {
-            printWriter.println(
-                    client.getName() + "," + client.getRfc() + "," + client.getNature() + "," + client.getRegime()
-                            + "," + sep + "," + setResult(client.isProvider()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + ","
-                            + setResult(client.isClient()) + "," + client.getClientAccount()  + "," + client.getIncomeAccount() + ","
-                            + client.getPolicyType() + "," + client.getDescription() + "," + setResult(client.isContractor())
-            );
-        });
-        providerEntities.forEach(provider -> {
-            printWriter.println(
-                    provider.getName() + "," + provider.getRfc() + "," + provider.getNature() + "," + provider.getRegime()
-                            + "," + provider.getNationality() + "," + setResult(provider.isProvider()) + "," + provider.getProviderAccount()
-                            + "," + provider.getExpenseAccount() + "," + provider.getPolicyType() + "," + provider.getDescription()
-                            + "," + provider.getCountry() + "," + provider.getDIOTOperation() + provider.getTaxKey()
-                            + "," + setResult(provider.isClient()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + setResult(provider.isContractor())
+        if (clientEntities != null){
+            clientEntities.forEach(client -> {
+                printWriter.println(
+                        client.getName() + "," + client.getRfc() + "," + client.getNature() + "," + client.getRegime()
+                                + "," + sep + "," + setResult(client.isProvider()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + ","
+                                + setResult(client.isClient()) + "," + client.getClientAccount()  + "," + client.getIncomeAccount() + ","
+                                + client.getPolicyType() + "," + client.getDescription() + "," + setResult(client.isContractor())
+                );
+            });
+        }
+        if (providerEntities != null){
+            providerEntities.forEach(provider -> {
+                printWriter.println(
+                        provider.getName() + "," + provider.getRfc() + "," + provider.getNature() + "," + provider.getRegime()
+                                + "," + provider.getNationality() + "," + setResult(provider.isProvider()) + "," + provider.getProviderAccount()
+                                + "," + provider.getExpenseAccount() + "," + provider.getPolicyType() + "," + provider.getDescription()
+                                + "," + provider.getCountry() + "," + provider.getDIOTOperation() + "," + provider.getTaxKey()
+                                + "," + setResult(provider.isClient()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + setResult(provider.isContractor())
 
-            );
-        });
+                );
+            });
+        }
         printWriter.close();
     }
 

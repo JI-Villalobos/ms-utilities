@@ -161,6 +161,7 @@ public class ClientOptionsView extends JFrame {
         JTextField buyerSATIdentifierField = new JTextField();
         JTextField expenseMainAccountField = new JTextField();
         JTextField minimumAmountField = new JTextField();
+        JTextField incomeMainAccountField = new JTextField();
 
         if (isAnUpdate){
             ClientConfig config = clientConfig.get();
@@ -170,15 +171,17 @@ public class ClientOptionsView extends JFrame {
             buyerSATIdentifierField.setText(config.buyerSATIdentifier());
             expenseMainAccountField.setText(config.expenseMainAccount());
             minimumAmountField.setText(config.minimumAmountToApply().toString());
+            incomeMainAccountField.setText(config.incomeMainAccount());
             id = config.id();
         }
 
         Object[] fields = {
                 "Cuenta padre Proveedor", sellerMainAccountField,
-                "Codigo SAT", sellerSATIdentifierField,
-                "Cuenta principal ventas", buyerMainAccountField,
-                "Codigo SAT", buyerSATIdentifierField,
+                "Codigo SAT proveedores", sellerSATIdentifierField,
+                "Cuenta padre Cliente", buyerMainAccountField,
+                "Codigo SAT clientes", buyerSATIdentifierField,
                 "Cuenta pricipal gastos", expenseMainAccountField,
+                "Cuenta Principal ventas", incomeMainAccountField,
                 "Aplicar gastos a monto mayor a:", minimumAmountField,
         };
 
@@ -198,6 +201,7 @@ public class ClientOptionsView extends JFrame {
                     buyerSATIdentifierField.getText(),
                     expenseMainAccountField.getText(),
                     minimumAmountField.getText(),
+                    incomeMainAccountField.getText(),
                     isAnUpdate,
                     id
             );
@@ -221,7 +225,7 @@ public class ClientOptionsView extends JFrame {
             String sellerMainAccountField, String sellerSATIdentifierField,
             String buyerMainAccountField, String buyerSATIdentifierField,
             String expenseMainAccountField, String minimumAmountField,
-            boolean isAnUpdate, Integer id){
+            String incomeMainAccountField, boolean isAnUpdate, Integer id){
 
         if (isAnUpdate){
             return new ClientConfig(
@@ -233,7 +237,8 @@ public class ClientOptionsView extends JFrame {
                     buyerMainAccountField,
                     buyerSATIdentifierField,
                     expenseMainAccountField,
-                    Double.parseDouble(minimumAmountField)
+                    Double.parseDouble(minimumAmountField),
+                    incomeMainAccountField
             );
         } else {
             return new ClientConfig(
@@ -244,7 +249,8 @@ public class ClientOptionsView extends JFrame {
                     buyerMainAccountField,
                     buyerSATIdentifierField,
                     expenseMainAccountField,
-                    Double.parseDouble(minimumAmountField)
+                    Double.parseDouble(minimumAmountField),
+                    incomeMainAccountField
             );
         }
     }
