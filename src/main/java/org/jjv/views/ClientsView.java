@@ -119,7 +119,7 @@ public class ClientsView extends JFrame {
 
         newClientButton.setBackground(new Color(153, 0, 153));
         newClientButton.setForeground(new Color(255, 255, 255));
-        newClientButton.setText("+ Client");
+        newClientButton.setText("+ Cliente");
 
         GroupLayout optionsPanelLayout = new GroupLayout(optionsPanel);
         optionsPanel.setLayout(optionsPanelLayout);
@@ -228,7 +228,7 @@ public class ClientsView extends JFrame {
                 refreshClients();
                 JOptionPane.showMessageDialog(this,
                         "Cliente agregado correctamente",
-                        "Éxito",
+                        "EXITO",
                         JOptionPane.INFORMATION_MESSAGE);
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(this,

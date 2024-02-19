@@ -31,7 +31,7 @@ public class AccountCreationView extends JFrame {
 
     public AccountCreationView(){
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setTitle("Crear cuentas");
+        setTitle("Crear Cuentas");
         setResizable(false);
         setLocationRelativeTo(null);
         initComponents();
@@ -232,7 +232,7 @@ public class AccountCreationView extends JFrame {
 
         if (taxZero > 0){
             infoField.setText(
-                    "- se detectaron " + taxZero + " cuentas cuyas facturas estan excentas de IVA."
+                    "- Se detectaron " + taxZero + " cuentas cuyas facturas estan excentas de IVA."
             );
         } else {
             infoField.setText(

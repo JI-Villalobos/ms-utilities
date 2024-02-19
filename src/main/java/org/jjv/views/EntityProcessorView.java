@@ -85,7 +85,7 @@ public class EntityProcessorView extends JFrame {
                 }
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(this,
-                        "Algun error inesperado provoco que no fuse posible generar el .txt",
+                        "Algun error inesperado provoco que no fuese posible generar el .txt",
                         "ERROR",
                         JOptionPane.ERROR_MESSAGE
                 );
