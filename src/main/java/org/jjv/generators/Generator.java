@@ -33,7 +33,7 @@ public class Generator{
             clientEntities.forEach(client -> {
                 printWriter.println(
                         client.getName() + "," + client.getRfc() + "," + client.getNature() + "," + client.getRegime()
-                                + "," + sep + "," + setResult(client.isProvider()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + ","
+                                + "," + "04" + "," + setResult(client.isProvider()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + ","
                                 + setResult(client.isClient()) + "," + client.getClientAccount()  + "," + client.getIncomeAccount() + ","
                                 + client.getPolicyType() + "," + client.getDescription() + "," + setResult(client.isContractor())
                 );
