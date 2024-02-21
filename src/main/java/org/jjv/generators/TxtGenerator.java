@@ -12,7 +12,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class Generator{
+public class TxtGenerator {
     static String sep = "";
     public static void generateAccountFile() throws IOException {
         List<Account> accounts = AccountInstance.get();

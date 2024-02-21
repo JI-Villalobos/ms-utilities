@@ -80,4 +80,9 @@ public class ControllerView {
         OperatorCreationView operatorCreationView = new OperatorCreationView(nature);
         operatorCreationView.setVisible(true);
     }
+
+    public static void connectOtherOpsView(){
+        OtherOpsView otherOpsView = new OtherOpsView();
+        otherOpsView.setVisible(true);
+    }
 }

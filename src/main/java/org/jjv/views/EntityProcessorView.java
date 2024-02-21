@@ -1,6 +1,6 @@
 package org.jjv.views;
 
-import org.jjv.generators.Generator;
+import org.jjv.generators.TxtGenerator;
 import org.jjv.instances.OperatorInstance;
 import org.jjv.instances.PathInstance;
 import org.jjv.instances.TaskCompleteInstance;
@@ -74,7 +74,7 @@ public class EntityProcessorView extends JFrame {
             PathInstance.create(filePath);
 
             try {
-                Generator.generateOperatorsFile();
+                TxtGenerator.generateOperatorsFile();
                 int confirm = JOptionPane.showConfirmDialog(
                         this,
                         "Archivo de Terceros generado exitosamente, confirme si desea registrarlos.",

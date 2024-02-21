@@ -1,6 +1,6 @@
 package org.jjv.views;
 
-import org.jjv.generators.Generator;
+import org.jjv.generators.TxtGenerator;
 import org.jjv.instances.AccountInstance;
 import org.jjv.instances.PathInstance;
 import org.jjv.models.Account;
@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 import static javax.swing.GroupLayout.*;
 import static javax.swing.GroupLayout.Alignment.*;
@@ -248,7 +247,7 @@ public class AccountCreationView extends JFrame {
             String outputPath = path.concat(".txt");
             PathInstance.create(outputPath);
             try {
-                Generator.generateAccountFile();
+                TxtGenerator.generateAccountFile();
                 JOptionPane.showMessageDialog(this,
                         "Archivo de cuentas generado exitosamente",
                         "Archivo de cuentas generado",
