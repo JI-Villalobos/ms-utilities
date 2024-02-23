@@ -17,6 +17,8 @@ public class OtherOpsView extends JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         initComponents();
+
+        templatesButton.addActionListener(e -> ControllerView.connectTemplateView());
     }
 
     private void initComponents(){

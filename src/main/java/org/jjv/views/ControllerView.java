@@ -85,4 +85,9 @@ public class ControllerView {
         OtherOpsView otherOpsView = new OtherOpsView();
         otherOpsView.setVisible(true);
     }
+
+    public static void connectTemplateView(){
+        TemplateView templateView = new TemplateView();
+        templateView.setVisible(true);
+    }
 }

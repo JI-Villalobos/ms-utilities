@@ -54,6 +54,24 @@ public class TxtGenerator {
         printWriter.close();
     }
 
+    public static void generateOperatorExampleModel() throws IOException {
+        PrintWriter printWriter = new PrintWriter(PathInstance.getPath(), StandardCharsets.UTF_8);
+
+        printWriter.println("Objeto=Terceros");
+        printWriter.println("Delimitador=,");
+        printWriter.println("CalificadorTexto=\"");
+        printWriter.println("FormatoFechas=dd/mm/aaaa");
+        printWriter.println("SeparadorLineas=|");
+        printWriter.println("ExportarTipoReg=N");
+        printWriter.println("PermitirImportar=S");
+        printWriter.println("Campos_1=NOMBRE(200),RFC(18),TIPO_PERSONA(1),CLAVE_REGIMEN_FISCAL(3),TIPO(2)");
+        printWriter.println("Campos_1=ES_PROVEEDOR(1),CUENTA_CXP(30),CUENTA_CXP_CUADRE(30),CLAVE_TIPO_POLIZA_COMPRAS(1),DESC_POLIZA_COMPRAS(200)");
+        printWriter.println("Campos_1=PAIS_RESIDENCIA_DIOT(2),OPERACION_PREDET_DIOT(2),CLAVE_IMPUESTO_PREDET(20),ES_CLIENTE(1),CUENTA_CXC(30)");
+        printWriter.println("Campos_1=CUENTA_CXC_CUADRE(30),CLAVE_TIPO_POLIZA_VENTAS(1),DESC_POLIZA_VENTAS(200),ES_CONTRATANTE(1)");
+
+        printWriter.close();
+    }
+
     private static String setResult(boolean result){
         if (result){
             return "S";
