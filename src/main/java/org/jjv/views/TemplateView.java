@@ -1,8 +1,15 @@
 package org.jjv.views;
 
+import org.jjv.models.Template;
+import org.jjv.templates.BasicTemplate;
+import org.jjv.templates.DemoTemplates;
+
 import javax.swing.*;
 
 import java.awt.Color;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.List;
 
 import static javax.swing.GroupLayout.*;
 import static javax.swing.GroupLayout.Alignment.*;
@@ -14,7 +21,7 @@ public class TemplateView extends JFrame {
     private JPanel examplePane;
     private JScrollPane exampleScrollPane;
     private JTextArea exampleTextArea;
-    private JTextArea exampleTextArea1;
+    private JTextArea basicTextArea;
     private JButton generateExampleButton;
     private JButton generateTemplateButton;
     private JTabbedPane pane;
@@ -23,12 +30,39 @@ public class TemplateView extends JFrame {
     private JScrollPane templateScrollPane;
     private JPanel templatesPane;
 
+    List<Template> basicTemplates = BasicTemplate.getBasicTemplates();
+    List<Template> demoTemplates = DemoTemplates.getDemoTemplates();
+
     public TemplateView(){
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle("Plantillas y Ejemplos");
         setResizable(false);
         setLocationRelativeTo(null);
         initComponents();
+
+        templateCodeTextField.setText(basicTemplates.get(0).code());
+        exampleCodeTextField.setText(demoTemplates.get(0).code());
+
+        basicTextArea.setText(basicTemplates.get(0).description());
+        exampleTextArea.setText(demoTemplates.get(0).description());
+
+        templateComboBox.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                if (e.getStateChange() == ItemEvent.SELECTED){
+                    Object item = e.getItem();
+                    Template template = basicTemplates.stream()
+                            .filter(t -> t.name().equals(item))
+                            .findAny()
+                            .orElse(null);
+                    assert template != null;
+
+                    basicTextArea.setText(template.description());
+                    templateCodeTextField.setText(template.code());
+                }
+            }
+        });
+        loadTemplates();
     }
     private void initComponents(){
         pane = new JTabbedPane();
@@ -42,12 +76,8 @@ public class TemplateView extends JFrame {
         templateComboBox = new JComboBox<>();
         templateCodeTextField = new JTextField();
         templateScrollPane = new JScrollPane();
-        exampleTextArea1 = new JTextArea();
+        basicTextArea = new JTextArea();
         generateTemplateButton = new JButton();
-
-        exampleComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
-        exampleCodeTextField.setText("A001");
 
         generateExampleButton.setBackground(new Color(153, 0, 153));
         generateExampleButton.setForeground(new Color(255, 255, 255));
@@ -93,13 +123,9 @@ public class TemplateView extends JFrame {
 
         pane.addTab("Ejemplos", examplePane);
 
-        templateComboBox.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
-        templateCodeTextField.setText("B001");
-
-        exampleTextArea1.setColumns(20);
-        exampleTextArea1.setRows(5);
-        templateScrollPane.setViewportView(exampleTextArea1);
+        basicTextArea.setColumns(20);
+        basicTextArea.setRows(5);
+        templateScrollPane.setViewportView(basicTextArea);
 
         generateTemplateButton.setBackground(new Color(153, 0, 153));
         generateTemplateButton.setForeground(new Color(255, 255, 255));
@@ -154,4 +180,25 @@ public class TemplateView extends JFrame {
 
         pack();
     }
+
+    private void loadTemplates(){
+        String[] demoTemplateNames = new String[demoTemplates.size()];
+        String[] basicTemplateNames = new String[basicTemplates.size()];
+
+        int i = 0;
+        int j = 0;
+
+        for (Template template : demoTemplates){
+            demoTemplateNames[j] = template.name();
+            j++;
+        }
+        for (Template template: basicTemplates) {
+            basicTemplateNames[i] = template.name();
+            i++;
+        }
+
+        exampleComboBox.setModel(new DefaultComboBoxModel<>(demoTemplateNames));
+        templateComboBox.setModel(new DefaultComboBoxModel<>(basicTemplateNames));
+    }
+
 }
