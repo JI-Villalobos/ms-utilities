@@ -7,7 +7,7 @@ public class Headers {
 
     public static String[] ConfigFileHeaders = {
             "Cliente", "ID Cliente", "ID Organizacion", "Cuenta Principal Proveedores", "Codigo SAT Proveedores",
-            "Cuenta Principal Clientes", "Codigo SAT Clientes", "Cuenta Principal Gastos", "Monto Predefinido Cuenta Gastos",
+            "Cuenta Principal Clientes", "Codigo SAT Clientes", "Cuenta Principal Gastos", "Monto Predefinido", "Cuenta Gastos",
             "Cuenta Principal Ventas"
     };
 }

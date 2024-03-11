@@ -11,7 +11,7 @@ public class DemoTemplates {
     private static final Template configPrefillTemplate = new Template(
             "Configuracion de clientes",
             Headers.ConfigFileHeaders,
-            "Ejemplo de prellenado del archivo de \nconfiguracion de clientes para \nsu carga masiva",
+            "Descarga el prellenado del archivo de \nconfiguracion de clientes para \nsu carga masiva",
             "E001", DEMO
     );
 

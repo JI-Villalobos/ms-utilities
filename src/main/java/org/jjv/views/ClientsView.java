@@ -186,6 +186,7 @@ public class ClientsView extends JFrame {
 
         try {
             List<Client> clients = clientRepository.findAll();
+            ClientInstance.create(clients);
             for (Client client : clients){
                 Object[] data = {
                     client.id(),

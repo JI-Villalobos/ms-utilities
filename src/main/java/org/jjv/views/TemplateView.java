@@ -1,6 +1,8 @@
 package org.jjv.views;
 
+import org.jjv.instances.PathInstance;
 import org.jjv.models.Template;
+import org.jjv.operations.WriteOperation;
 import org.jjv.templates.BasicTemplate;
 import org.jjv.templates.DemoTemplates;
 
@@ -9,6 +11,8 @@ import javax.swing.*;
 import java.awt.Color;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 
 import static javax.swing.GroupLayout.*;
@@ -199,6 +203,35 @@ public class TemplateView extends JFrame {
 
         exampleComboBox.setModel(new DefaultComboBoxModel<>(demoTemplateNames));
         templateComboBox.setModel(new DefaultComboBoxModel<>(basicTemplateNames));
+        generateExampleButton.addActionListener(e -> {
+            if (exampleCodeTextField.getText().equals("E001"))
+                generateTemplate();
+        });
     }
 
+    private void generateTemplate(){
+        boolean selectedPath = FileDialog.showFileDialog(this, "Selecciona ubicación del archivo a guardar");
+        if (selectedPath){
+            String path = PathInstance.getPath();
+            String file = path.concat(".xlsx");
+            PathInstance.create(file);
+
+            try {
+                WriteOperation.writeClientConfigTemplate();
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Archivo generado exitosamente.",
+                        "Terceros", JOptionPane.INFORMATION_MESSAGE
+                );
+            } catch (IOException e){
+                JOptionPane.showMessageDialog(this,
+                        "Algun error inesperado provoco que no fuese posible generar el .xlsx",
+                        "ERROR",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }
