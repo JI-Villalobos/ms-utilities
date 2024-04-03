@@ -7,12 +7,14 @@ import org.jjv.instances.PathInstance;
 import org.jjv.models.ClientConfig;
 import org.jjv.models.Operator;
 import org.jjv.operations.ExtractOperation;
+import org.jjv.operators.EntityOperator;
 import org.jjv.persistence.ClientConfigRepository;
 import org.jjv.persistence.OperatorRepository;
 import org.jjv.persistence.Repository;
 import org.jjv.utils.DefaultValues;
 
 import javax.swing.*;
+import java.awt.Color;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashSet;
@@ -31,6 +33,7 @@ public class ClientOptionsView extends JFrame {
     private JButton addClientAccountsButton;
     private JButton batchOperatorsButton;
     private JButton clientConfigurationButton;
+    private JButton verifyOperatorsButton;
     private JTextField clientField;
 
     public ClientOptionsView(){
@@ -49,6 +52,7 @@ public class ClientOptionsView extends JFrame {
         batchOperatorsButton.addActionListener(e -> addOperators());
         clientConfigurationButton.addActionListener(e -> setConfiguration());
         addClientAccountsButton.addActionListener(e -> setConfigOperation());
+        verifyOperatorsButton.addActionListener(e -> verifyOperators());
     }
 
     private void initComponents(){
@@ -58,22 +62,27 @@ public class ClientOptionsView extends JFrame {
         batchOperatorsButton = new JButton();
         clientConfigurationButton = new JButton();
         addClientAccountsButton = new JButton();
+        verifyOperatorsButton = new JButton();
         
         clientLabel.setText("CLIENTE:");
 
         clientField.setEditable(false);
 
-        batchOperatorsButton.setBackground(new java.awt.Color(153, 0, 153));
-        batchOperatorsButton.setForeground(new java.awt.Color(255, 255, 255));
+        batchOperatorsButton.setBackground(new Color(153, 0, 153));
+        batchOperatorsButton.setForeground(new Color(255, 255, 255));
         batchOperatorsButton.setText("<html><p>Carga </p> <p>Terceros</p></html>\n");
 
-        clientConfigurationButton.setBackground(new java.awt.Color(153, 0, 153));
-        clientConfigurationButton.setForeground(new java.awt.Color(255, 255, 255));
+        clientConfigurationButton.setBackground(new Color(153, 0, 153));
+        clientConfigurationButton.setForeground(new Color(255, 255, 255));
         clientConfigurationButton.setText("Configuracion");
 
-        addClientAccountsButton.setBackground(new java.awt.Color(153, 0, 153));
-        addClientAccountsButton.setForeground(new java.awt.Color(255, 255, 255));
+        addClientAccountsButton.setBackground(new Color(153, 0, 153));
+        addClientAccountsButton.setForeground(new Color(255, 255, 255));
         addClientAccountsButton.setText("+Cuentas");
+
+        verifyOperatorsButton.setBackground(new Color(153, 0, 153));
+        verifyOperatorsButton.setForeground(new Color(255, 255, 255));
+        verifyOperatorsButton.setText("<html><p>Verificar </p> <p>Terceros</p></html>\n");
 
         GroupLayout clientOptionsPanelLayout = new GroupLayout(clientOptionsPanel);
         clientOptionsPanel.setLayout(clientOptionsPanelLayout);
@@ -92,7 +101,11 @@ public class ClientOptionsView extends JFrame {
                                                 .addGap(32, 32, 32)
                                                 .addComponent(clientConfigurationButton, PREFERRED_SIZE, 92, PREFERRED_SIZE)
                                                 .addGap(28, 28, 28)
-                                                .addComponent(addClientAccountsButton, PREFERRED_SIZE, 92, PREFERRED_SIZE)))
+                                                .addComponent(addClientAccountsButton, PREFERRED_SIZE, 92, PREFERRED_SIZE)
+                                                .addGap(32, 32, 32)
+                                                .addComponent(verifyOperatorsButton, PREFERRED_SIZE,92, PREFERRED_SIZE)
+                                        ))
+                                .addGap(28,28,28)
                                 .addContainerGap(39, Short.MAX_VALUE))
         );
         clientOptionsPanelLayout.setVerticalGroup(
@@ -107,7 +120,10 @@ public class ClientOptionsView extends JFrame {
                                         .addComponent(batchOperatorsButton, TRAILING, PREFERRED_SIZE, 48, PREFERRED_SIZE)
                                         .addGroup(TRAILING, clientOptionsPanelLayout.createParallelGroup(BASELINE)
                                                 .addComponent(clientConfigurationButton, PREFERRED_SIZE, 48, PREFERRED_SIZE)
-                                                .addComponent(addClientAccountsButton, PREFERRED_SIZE, 51, PREFERRED_SIZE)))
+                                                .addComponent(addClientAccountsButton, PREFERRED_SIZE, 51, PREFERRED_SIZE)
+                                                .addComponent(verifyOperatorsButton, PREFERRED_SIZE,48, PREFERRED_SIZE)
+                                        ))
+
                                 .addGap(22, 22, 22))
         );
 
@@ -285,6 +301,37 @@ public class ClientOptionsView extends JFrame {
             JOptionPane.showMessageDialog(this,
                     "Ocurrio un error al intentar cargar terceros: " + e.getMessage(),
                     "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void verifyOperators(){
+        boolean pathIsSelected = FileDialog.showFileDialog(this, "Selecciona archivo de terceros");
+        if (pathIsSelected){
+            try {
+                List<Operator> operators = ExtractOperation.extractOperators();
+                List<Operator> unregisteredOps = EntityOperator.verify(operators);
+                if (unregisteredOps.isEmpty()){
+                    JOptionPane.showMessageDialog(this,
+                            "No hay terceros que registrar",
+                            "UPDATED", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    int confirm = JOptionPane.showConfirmDialog(
+                            this,
+                            "Se detectaron " + unregisteredOps.size() + " terceros ¿Desea registrarlos?",
+                            "Terceros", JOptionPane.OK_CANCEL_OPTION
+                    );
+                    if (confirm == JOptionPane.OK_OPTION){
+                        operatorRepository.saveAll(unregisteredOps);
+                        JOptionPane.showMessageDialog(this,
+                                "Terceros registrados Exitosamente",
+                                "Registro Exitoso", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                    loadOperators();
+                }
+
+            } catch (IOException | SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 }
