@@ -1,18 +1,15 @@
-package org.jjv.operators;
+package org.jjv.processors;
 
 import org.jjv.instances.OperatorInstance;
 import org.jjv.models.Document;
-import org.jjv.models.Operator;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-public class DocumentOperator {
+public class DocumentProcessor {
     Function<List<Document>, List<Document>> clearDuplicatedData = documentList -> {
         List<Document> cleanedList = new ArrayList<>();
         Set<String> identifiersFound = new HashSet<>();

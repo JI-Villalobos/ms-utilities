@@ -2,8 +2,8 @@ package org.jjv.views;
 
 import org.jjv.instances.AccountInstance;
 import org.jjv.models.Account;
-import org.jjv.operations.DataProcessor;
-import org.jjv.operations.EntityProcessor;
+import org.jjv.processors.DataProcessor;
+import org.jjv.processors.EntityProcessor;
 import org.jjv.utils.Config;
 import org.jjv.utils.DocumentNature;
 
@@ -73,9 +73,9 @@ public class ControllerView {
 
     public static void connectOperatorCreationView(DocumentNature nature){
         if (nature.equals(DocumentNature.EMITTED)){
-            EntityProcessor.setClientEntities();
+            EntityProcessor.processClientEntities();
         } else {
-            EntityProcessor.setExtendedProviderEntities();
+            EntityProcessor.processExtendedProviderEntities();
         }
         OperatorCreationView operatorCreationView = new OperatorCreationView(nature);
         operatorCreationView.setVisible(true);

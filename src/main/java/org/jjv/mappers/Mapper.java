@@ -1,4 +1,4 @@
-package org.jjv.operators;
+package org.jjv.mappers;
 
 import java.util.List;
 

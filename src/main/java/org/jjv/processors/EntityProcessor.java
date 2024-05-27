@@ -1,4 +1,4 @@
-package org.jjv.operations;
+package org.jjv.processors;
 
 import org.jjv.instances.AccountInstance;
 import org.jjv.instances.EntityInstance;
@@ -6,10 +6,10 @@ import org.jjv.models.Account;
 import org.jjv.models.ClientEntity;
 import org.jjv.models.ExtendedProviderEntity;
 import org.jjv.models.ProviderEntity;
-import org.jjv.operators.ClientEntityMapper;
-import org.jjv.operators.ExtendedProviderEntityMapper;
-import org.jjv.operators.Filter;
-import org.jjv.operators.ProviderEntityMapper;
+import org.jjv.mappers.ClientEntityMapper;
+import org.jjv.mappers.ExtendedProviderEntityMapper;
+import org.jjv.processors.Filter;
+import org.jjv.mappers.ProviderEntityMapper;
 import org.jjv.utils.DocumentNature;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
 public class EntityProcessor {
    static List<Account> accounts = AccountInstance.get();
 
-    public static void setClientEntities(){
+    public static void processClientEntities(){
         Filter filter = new Filter();
         ClientEntityMapper mapper = new ClientEntityMapper();
         List<Account> clientAccounts = filter.filter(accounts, DocumentNature.EMITTED);
@@ -26,7 +26,7 @@ public class EntityProcessor {
         EntityInstance.createClients(clientEntityList);
     }
 
-    public static void setProviderEntities(){
+    public static void processProviderEntities(){
         Filter filter = new Filter();
         ProviderEntityMapper mapper = new ProviderEntityMapper();
         List<Account> providerAccounts = filter.filter(accounts, DocumentNature.RECEIVED);
@@ -35,7 +35,7 @@ public class EntityProcessor {
         EntityInstance.createProviders(providerEntityList);
     }
 
-    public static void setExtendedProviderEntities(){
+    public static void processExtendedProviderEntities(){
         Filter filter = new Filter();
         ExtendedProviderEntityMapper mapper = new ExtendedProviderEntityMapper();
         List<Account> providerAccounts = filter.filter(accounts, DocumentNature.RECEIVED);

@@ -1,4 +1,4 @@
-package org.jjv.operators;
+package org.jjv.processors;
 
 import org.jjv.instances.OperatorInstance;
 import org.jjv.models.Operator;

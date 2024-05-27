@@ -1,12 +1,10 @@
-package org.jjv.operators;
+package org.jjv.mappers;
 
 import org.jjv.instances.ClientConfigInstance;
 import org.jjv.instances.ClientInstance;
 import org.jjv.models.Account;
 import org.jjv.models.ClientConfig;
-import org.jjv.models.ExtendedProviderEntity;
 import org.jjv.models.ProviderEntity;
-import org.jjv.utils.CountryCode;
 import org.jjv.utils.DefaultValues;
 
 import java.util.ArrayList;

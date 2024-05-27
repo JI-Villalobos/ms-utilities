@@ -1,12 +1,10 @@
-package org.jjv.operators;
+package org.jjv.processors;
 
 import org.jjv.models.Account;
-import org.jjv.models.Document;
 import org.jjv.utils.DocumentNature;
 
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class Filter {
