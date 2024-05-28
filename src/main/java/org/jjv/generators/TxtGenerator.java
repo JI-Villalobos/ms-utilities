@@ -17,11 +17,9 @@ public class TxtGenerator {
     public static void generateAccountFile() throws IOException {
         List<Account> accounts = AccountInstance.get();
         PrintWriter printWriter = new PrintWriter(PathInstance.getPath(), StandardCharsets.UTF_8);
-        accounts.forEach(account -> {
-            printWriter.println(
-                    account.subAccount() + "," + account.name() + "," + account.accountType() + "," + account.accountNature() + "," + account.satCode()
-            );
-        });
+        accounts.forEach(account -> printWriter.println(
+                account.subAccount() + "," + account.name() + "," + account.accountType() + "," + account.accountNature() + "," + account.satCode()
+        ));
         printWriter.close();
     }
 
@@ -30,26 +28,22 @@ public class TxtGenerator {
         List<ExtendedProviderEntity> providerEntities = EntityInstance.getExtendedProviderEntityList();
         PrintWriter printWriter = new PrintWriter(PathInstance.getPath(), StandardCharsets.UTF_8);
         if (clientEntities != null){
-            clientEntities.forEach(client -> {
-                printWriter.println(
-                        client.getName() + "," + client.getRfc() + "," + client.getNature() + "," + client.getRegime()
-                                + "," + "04" + "," + setResult(client.isProvider()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + ","
-                                + setResult(client.isClient()) + "," + client.getClientAccount()  + "," + client.getIncomeAccount() + ","
-                                + client.getPolicyType() + "," + client.getDescription() + "," + setResult(client.isContractor())
-                );
-            });
+            clientEntities.forEach(client -> printWriter.println(
+                    client.getName() + "," + client.getRfc() + "," + client.getNature() + "," + client.getRegime()
+                            + "," + "04" + "," + setResult(client.isProvider()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + "," + sep + ","
+                            + setResult(client.isClient()) + "," + client.getClientAccount()  + "," + client.getIncomeAccount() + ","
+                            + client.getPolicyType() + "," + client.getDescription() + "," + setResult(client.isContractor())
+            ));
         }
         if (providerEntities != null){
-            providerEntities.forEach(provider -> {
-                printWriter.println(
-                        provider.getName() + "," + provider.getRfc() + "," + provider.getNature() + "," + provider.getRegime()
-                                + "," + provider.getNationality() + "," + setResult(provider.isProvider()) + "," + provider.getProviderAccount()
-                                + "," + provider.getExpenseAccount() + "," + provider.getPolicyType() + "," + provider.getDescription()
-                                + "," + provider.getCountry() + "," + provider.getDIOTOperation() + "," + provider.getTaxKey()
-                                + "," + setResult(provider.isClient()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + setResult(provider.isContractor())
+            providerEntities.forEach(provider -> printWriter.println(
+                    provider.getName() + "," + provider.getRfc() + "," + provider.getNature() + "," + provider.getRegime()
+                            + "," + provider.getNationality() + "," + setResult(provider.isProvider()) + "," + provider.getProviderAccount()
+                            + "," + provider.getExpenseAccount() + "," + provider.getPolicyType() + "," + provider.getDescription()
+                            + "," + provider.getCountry() + "," + provider.getDIOTOperation() + "," + provider.getTaxKey()
+                            + "," + setResult(provider.isClient()) + "," + sep + "," + sep + "," + sep + "," + sep + "," + setResult(provider.isContractor())
 
-                );
-            });
+            ));
         }
         printWriter.close();
     }

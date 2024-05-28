@@ -16,13 +16,9 @@ public class InitialView extends JFrame {
         setLocationRelativeTo(null);
         initComponents();
 
-        clientButton.addActionListener(e -> {
-            ControllerView.connectClientsView(this);
-        });
+        clientButton.addActionListener(e -> ControllerView.connectClientsView(this));
 
-        opButton.addActionListener(e -> {
-            ControllerView.connectOtherOpsView();
-        });
+        opButton.addActionListener(e -> ControllerView.connectOtherOpsView());
     }
     
     private void initComponents(){

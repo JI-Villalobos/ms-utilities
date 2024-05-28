@@ -50,20 +50,17 @@ public class TemplateView extends JFrame {
         basicTextArea.setText(basicTemplates.get(0).description());
         exampleTextArea.setText(demoTemplates.get(0).description());
 
-        templateComboBox.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                if (e.getStateChange() == ItemEvent.SELECTED){
-                    Object item = e.getItem();
-                    Template template = basicTemplates.stream()
-                            .filter(t -> t.name().equals(item))
-                            .findAny()
-                            .orElse(null);
-                    assert template != null;
+        templateComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED){
+                Object item = e.getItem();
+                Template template = basicTemplates.stream()
+                        .filter(t -> t.name().equals(item))
+                        .findAny()
+                        .orElse(null);
+                assert template != null;
 
-                    basicTextArea.setText(template.description());
-                    templateCodeTextField.setText(template.code());
-                }
+                basicTextArea.setText(template.description());
+                templateCodeTextField.setText(template.code());
             }
         });
         loadTemplates();

@@ -31,8 +31,8 @@ public class WriteOperation {
         Sheet sheet = workbook.createSheet();
         workbook.setSheetName(0, "config");
 
-        Row row = null;
-        Cell cell = null;
+        Row row;
+        Cell cell;
 
         //set headers
         row = sheet.createRow(0);

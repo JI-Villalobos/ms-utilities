@@ -14,9 +14,7 @@ public class DocumentProcessor {
         List<Document> cleanedList = new ArrayList<>();
         Set<String> identifiersFound = new HashSet<>();
         
-        documentList.forEach(document -> {
-            identifiersFound.add(document.rfc());
-        });
+        documentList.forEach(document -> identifiersFound.add(document.rfc()));
 
         identifiersFound.forEach(identifier -> {
             List<Document> filteredList = documentList.stream().filter(document -> document.rfc()

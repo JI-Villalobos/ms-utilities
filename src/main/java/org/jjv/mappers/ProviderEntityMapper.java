@@ -16,9 +16,7 @@ public class ProviderEntityMapper implements Mapper<Account, ProviderEntity> {
     @Override
     public List<ProviderEntity> mapTo(List<Account> accounts) {
         List<ProviderEntity> providerEntityList = new ArrayList<>();
-        accounts.forEach(account -> {
-            providerEntityList.add(createProviderEntity(account));
-        });
+        accounts.forEach(account -> providerEntityList.add(createProviderEntity(account)));
         return providerEntityList;
     }
 

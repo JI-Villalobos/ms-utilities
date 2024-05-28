@@ -15,18 +15,14 @@ public class CollectOperators {
     public static void collectFromClientEntities(){
         List<ClientEntity> clientEntities = EntityInstance.getClientEntities();
         List<Operator> operators = new ArrayList<>();
-        clientEntities.forEach( clientEntity -> {
-            operators.add(new Operator(clientEntity.getName(), clientEntity.getRfc(), clientId));
-        });
+        clientEntities.forEach( clientEntity -> operators.add(new Operator(clientEntity.getName(), clientEntity.getRfc(), clientId)));
         OperatorInstance.addOperators(operators);
     }
 
     public static void collectFromProviderEntities(){
         List<ExtendedProviderEntity> providerEntities = EntityInstance.getExtendedProviderEntityList();
         List<Operator> operators = new ArrayList<>();
-        providerEntities.forEach(providerEntity -> {
-            operators.add(new Operator(providerEntity.getName(), providerEntity.getRfc(), clientId));
-        });
+        providerEntities.forEach(providerEntity -> operators.add(new Operator(providerEntity.getName(), providerEntity.getRfc(), clientId)));
         OperatorInstance.addOperators(operators);
     }
 }

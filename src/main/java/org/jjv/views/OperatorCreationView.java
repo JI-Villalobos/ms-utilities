@@ -240,14 +240,12 @@ public class OperatorCreationView extends JFrame {
                 .findFirst()
                 .orElse(null);
 
-        int index;
-
         if (clientEntity != null){
             nameField.setText(clientEntity.getName());
             regimeField.setText(clientEntity.getRegime());
             incomeField.setText(clientEntity.getIncomeAccount());
 
-            index = clientEntities.indexOf(clientEntity);
+            clientEntities.indexOf(clientEntity);
 
             Object[] fields = {
                     "Nombre del Tercero", nameField,
@@ -280,14 +278,12 @@ public class OperatorCreationView extends JFrame {
                 .findFirst()
                 .orElse(null);
 
-        int index;
-
         if (providerEntity != null){
             nameField.setText(providerEntity.getName());
             regimeField.setText(providerEntity.getRegime());
             expenseField.setText(providerEntity.getExpenseAccount());
 
-            index = providerEntities.indexOf(providerEntity);
+            providerEntities.indexOf(providerEntity);
 
             Object[] fields = {
                     "Nombre del Tercero", nameField,

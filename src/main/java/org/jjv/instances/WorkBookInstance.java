@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public class WorkBookInstance {
     private static Workbook create() throws IOException {
-        Workbook workbook = null;
+        Workbook workbook;
         String path = PathInstance.getPath();
         FileInputStream inputStream = new FileInputStream(path);
         workbook = new XSSFWorkbook(inputStream);

@@ -52,18 +52,15 @@ public class ClientsView extends JFrame {
         refreshClients();
         loadClientConfigList();
 
-        clientsTable.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
-                String id = clientsTable.getValueAt(clientsTable.getSelectedRow(), 0).toString();
-                Client client = new Client(
-                        Integer.parseInt(id),
-                        clientsTable.getValueAt(clientsTable.getSelectedRow(), 1).toString(),
-                        DefaultValues.ORGANIZATION_NUMBER
-                );
-                ClientInstance.create(client);
-                clientSelectedField.setText(client.name());
-            }
+        clientsTable.getSelectionModel().addListSelectionListener(e -> {
+            String id = clientsTable.getValueAt(clientsTable.getSelectedRow(), 0).toString();
+            Client client = new Client(
+                    Integer.parseInt(id),
+                    clientsTable.getValueAt(clientsTable.getSelectedRow(), 1).toString(),
+                    DefaultValues.ORGANIZATION_NUMBER
+            );
+            ClientInstance.create(client);
+            clientSelectedField.setText(client.name());
         });
         newClientButton.addActionListener(e -> addClient());
         batchLoadButton.addActionListener(e -> addClients());

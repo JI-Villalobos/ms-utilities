@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public class DDBBVerifier {
     public static void checkConnection() throws SQLException {
         ConfigModel config = ConfigInstance.getSingle();
-        Connection connection = null;
+        Connection connection;
         connection = DriverManager.getConnection(config.getUrl(), config.getUsername(), config.getPassword());
         connection.close();
     }
