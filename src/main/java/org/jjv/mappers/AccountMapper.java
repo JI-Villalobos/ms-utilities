@@ -61,9 +61,15 @@ public class AccountMapper implements Mapper<Document, Account> {
         }
     }
 
+    /*
+     * The field regime consist of 3 digits that must be passed as string, ex. 601
+     * however, the Reader loads the value adding the .00 -> 601.00, this method
+     * deletes these floating characters.
+     */
     private static String deleteFloatChars(String regime){
         return regime.substring(0, 3);
     }
+
     private Account createAccount(Document document, Integer index){
         String mainAccount = setMainAccount(document.nature());
         String satCode = setCodeSat(document.nature());

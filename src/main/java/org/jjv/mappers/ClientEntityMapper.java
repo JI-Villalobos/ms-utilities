@@ -9,16 +9,17 @@ import org.jjv.utils.DefaultValues;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 public class ClientEntityMapper implements Mapper<Account, ClientEntity> {
     Integer client = ClientInstance.getSingle().id();
-    ClientConfig config = ClientConfigInstance.getSingle(client).get();
+
+    Optional<ClientConfig> config = ClientConfigInstance.getSingle(client);
 
     @Override
     public List<ClientEntity> mapTo(List<Account> accounts) {
         List<ClientEntity> clientEntityList = new ArrayList<>();
-        accounts.forEach(account -> {
-            clientEntityList.add(createClientEntity(account));
-        });
+        accounts.forEach(account -> clientEntityList.add(createClientEntity(account)));
         return clientEntityList;
     }
 
@@ -28,8 +29,14 @@ public class ClientEntityMapper implements Mapper<Account, ClientEntity> {
                 ClientEntity.setEntityNature(account.rfc()),
                 false, true, false,
                 ClientEntity.computeRegime(account.rfc()), DefaultValues.CLIENT_DESCRIPTION, account.subAccount(),
-                config.incomeMainAccount(), "D"
+                getAccount(), "D"
         );
+    }
+
+    private String getAccount(){
+        if (config.isPresent())
+            return config.get().incomeMainAccount();
+        return "";
     }
 
 }
