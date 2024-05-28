@@ -183,7 +183,7 @@ public class EntityProcessorView extends JFrame {
             operatorRepository.saveAll(operators);
             JOptionPane.showMessageDialog(this,
                     "Terceros registrados exitosamente",
-                    "ERROR", JOptionPane.INFORMATION_MESSAGE);
+                    "EXITO", JOptionPane.INFORMATION_MESSAGE);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
                     "Ocurrio un error al intentar el registro: " + e.getMessage(),
